@@ -10,15 +10,18 @@ import java.io.InputStreamReader;
 @Slf4j
 public class Trebuchet {
 
+  private static final String[] WRITTEN_NUMBERS = new String[]{"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+
   public static void main(String[] args) {
     try {
-      log.info("The result for part one is: {}: ", new Trebuchet().calibrationSumPartOne());
+      log.info("The result for part one is: {}", new Trebuchet().calibrationSumPartOne());
+      log.info("The result for part two is: {}", new Trebuchet().calibrationSumPartTwo());
     } catch (IOException ioe) {
       log.error("error while opening input file", ioe);
     }
   }
 
-  public long calibrationSumPartOne() throws IOException {
+  public long calibrationSumPartTwo() throws IOException {
 
     long sum = 0, current = 0, lineNumber = 0;
 
@@ -27,7 +30,10 @@ public class Trebuchet {
     try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
       String line;
       while ((line = br.readLine()) != null) {
-        Digits digits = findDigits(line);
+        Digits numberDigits = findNumberDigits(line);
+        Digits writtenDigits = findWrittenDigits(line);
+
+        Digits digits = calculateFinalDigits(numberDigits, writtenDigits);
 
         if (isDigitValid(digits.leftDigit) && isDigitValid(digits.rightDigit)) {
           lineNumber++;
@@ -45,7 +51,99 @@ public class Trebuchet {
     return sum;
   }
 
-  private Digits findDigits(String line) {
+  private Digits calculateFinalDigits(Digits numberDigits, Digits writtenDigits) {
+    int lowerLeftIndex, higherRightIndex;
+    int leftNumber, rightNumber;
+
+    if (isDigitInvalid(numberDigits.leftDigitIndex)) {
+      lowerLeftIndex = writtenDigits.leftDigitIndex;
+      leftNumber = writtenDigits.leftDigit;
+    } else if (isDigitInvalid(writtenDigits.leftDigitIndex)) {
+      lowerLeftIndex = numberDigits.leftDigitIndex;
+      leftNumber = numberDigits.leftDigit;
+    } else if (numberDigits.leftDigitIndex < writtenDigits.leftDigitIndex) {
+      lowerLeftIndex = numberDigits.leftDigitIndex;
+      leftNumber = numberDigits.leftDigit;
+    } else {
+      lowerLeftIndex = writtenDigits.leftDigitIndex;
+      leftNumber = writtenDigits.leftDigit;
+    }
+
+    if (isDigitInvalid(numberDigits.rightDigitIndex)) {
+      higherRightIndex = writtenDigits.rightDigitIndex;
+      rightNumber = writtenDigits.rightDigit;
+    } else if (isDigitInvalid(writtenDigits.rightDigitIndex)) {
+      higherRightIndex = numberDigits.rightDigitIndex;
+      rightNumber = numberDigits.rightDigit;
+    } else if (numberDigits.rightDigitIndex > writtenDigits.rightDigitIndex) {
+      higherRightIndex = numberDigits.rightDigitIndex;
+      rightNumber = numberDigits.rightDigit;
+    } else {
+      higherRightIndex = writtenDigits.rightDigitIndex;
+      rightNumber = writtenDigits.rightDigit;
+    }
+
+    return new Digits(leftNumber, lowerLeftIndex, rightNumber, higherRightIndex);
+  }
+
+  private Digits findWrittenDigits(String line) {
+    int leftDigit = Integer.MIN_VALUE, rightDigit = Integer.MIN_VALUE;
+    int leftDigitIndex = Integer.MIN_VALUE, rightDigitIndex = Integer.MIN_VALUE;
+    for (int number = 0; number < WRITTEN_NUMBERS.length; number++) {
+
+      int leftOccurrenceIdex = 0;
+      if ((leftOccurrenceIdex = line.toLowerCase().indexOf(WRITTEN_NUMBERS[number])) != -1) {
+          if (isDigitInvalid(leftDigitIndex)) {
+            leftDigit = number;
+            leftDigitIndex = leftOccurrenceIdex;
+          } else if (leftOccurrenceIdex < leftDigitIndex) {
+            leftDigit = number;
+            leftDigitIndex = leftOccurrenceIdex;
+          }
+      }
+
+      int rightOccurrenceIndex = 0;
+      if ((rightOccurrenceIndex = line.toLowerCase().lastIndexOf(WRITTEN_NUMBERS[number])) != -1) {
+        if (isDigitInvalid(rightDigitIndex)) {
+          rightDigit = number;
+          rightDigitIndex = rightOccurrenceIndex;
+        } else if (rightOccurrenceIndex > rightDigitIndex) {
+          rightDigit = number;
+          rightDigitIndex = rightOccurrenceIndex;
+        }
+      }
+    }
+
+    return new Digits(leftDigit, leftDigitIndex, rightDigit, rightDigitIndex);
+  }
+
+  public long calibrationSumPartOne() throws IOException {
+
+    long sum = 0, current = 0, lineNumber = 0;
+
+    InputStream is = this.getClass().getResourceAsStream("/year2023_day_01/input.txt");
+
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+      String line;
+      while ((line = br.readLine()) != null) {
+        Digits digits = findNumberDigits(line);
+
+        if (isDigitValid(digits.leftDigit) && isDigitValid(digits.rightDigit)) {
+          lineNumber++;
+          current = digits.rightDigit + (digits.leftDigit * 10L);
+          sum += current;
+          log.info("{}: line: {}, current: {}, sum: {}", lineNumber, line, current, sum);
+        } else {
+          lineNumber++;
+          log.error("{}: case skipped: line: {}, left number: {}, right number: {}", lineNumber, line, digits.leftDigit, digits.rightDigit);
+        }
+      }
+    }
+
+    return sum;
+  }
+
+  private Digits findNumberDigits(String line) {
     int leftDigit = Integer.MIN_VALUE, rightDigit = Integer.MIN_VALUE;
     int i = 0, j = line.length() - 1;
 
@@ -61,7 +159,7 @@ public class Trebuchet {
         j--;
       }
     }
-    return new Digits(leftDigit, rightDigit);
+    return new Digits(leftDigit, i, rightDigit, j);
   }
 
   private boolean isDigitValid(int digit) {
@@ -72,13 +170,5 @@ public class Trebuchet {
     return digit == Integer.MIN_VALUE;
   }
 
-  private static class Digits {
-    public final int leftDigit;
-    public final int rightDigit;
-
-    public Digits(int leftDigit, int rightDigit) {
-      this.leftDigit = leftDigit;
-      this.rightDigit = rightDigit;
-    }
-  }
+  private record Digits(int leftDigit, int leftDigitIndex, int rightDigit, int rightDigitIndex) {}
 }
