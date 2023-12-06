@@ -34,16 +34,6 @@ public class Trebuchet {
           current = digits.rightDigit + (digits.leftDigit * 10L);
           sum += current;
           log.info("{}: line: {}, current: {}, sum: {}", lineNumber, line, current, sum);
-        } else if (isDigitValid(digits.leftDigit)) {
-          lineNumber++;
-          current = digits.leftDigit + (digits.leftDigit * 10L);
-          sum += current;
-          log.info("{}: line: {}, current: {}, sum: {}", lineNumber, line, current, sum);
-        } else if (isDigitValid(digits.rightDigit)) {
-          lineNumber++;
-          current = digits.rightDigit + (digits.rightDigit * 10L);
-          sum += current;
-          log.info("{}: line: {}, current: {}, sum: {}", lineNumber, line, current, sum);
         } else {
           lineNumber++;
           log.error("{}: case skipped: line: {}, left number: {}, right number: {}", lineNumber, line, digits.leftDigit, digits.rightDigit);
