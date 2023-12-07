@@ -53,7 +53,6 @@ public class CubeConundrum {
 
         int maxRed = 0, maxGreen = 0, maxBlue = 0;
         String[] gamesText = idGames[GAME_INDEX].split(SEMICOLON_DELIMITER);
-        gameCheck:
         for (String gameText : gamesText) {
           String[] cubesText = gameText.split(COMMA_DELIMITER);
           for (String cubeText : cubesText) {
