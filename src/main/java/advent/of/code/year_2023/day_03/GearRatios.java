@@ -21,6 +21,12 @@ public class GearRatios {
     }
   }
 
+  public long getGearRatioSum() throws IOException {
+    long sum = 0;
+
+    return sum;
+  }
+
   public long getPowerSum() throws IOException {
 
     long sum = 0;
@@ -103,7 +109,7 @@ public class GearRatios {
   }
 
   private boolean hasSymbolOnTheLeft(int y, int x, int yLength, int xLength, String[][] schematics) {
-    return hasElement(y, x - y, yLength, xLength) && isSymbol(schematics[y][x - y]);
+    return hasElement(y, x - 1, yLength, xLength) && isSymbol(schematics[y][x - 1]);
   }
 
   private boolean hasSymbolOnDiagonalTopLeft(int y, int x, int yLength, int xLength, String[][] schematics) {
