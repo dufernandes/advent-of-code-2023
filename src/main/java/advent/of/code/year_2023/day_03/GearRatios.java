@@ -28,36 +28,31 @@ public class GearRatios {
 
     String[][] schematics = schematicsPlan.schematics();
     for (int y = 0; y < schematicsPlan.ySize(); y++) {
+
       Stack<Integer> numbers = new Stack<>();
       boolean hasAdjecentSymbol = false;
       for (int x = 0; x < schematicsPlan.xSize(); x++) {
+
         String currentElement = schematics[y][x];
         if (isDigit(schematics[y][x])) {
+
           numbers.push(Integer.parseInt(currentElement));
           if (hasAdjecentSymbol || hasAdjacentSymbol(y, x, schematicsPlan.ySize(), schematicsPlan.xSize(), schematics)) {
             hasAdjecentSymbol = true;
           }
-          if (!hasElement(y, x + 1, schematicsPlan.ySize(), schematicsPlan.ySize())) {
+
+          if (!hasElement(y, x + 1, schematicsPlan.ySize(), schematicsPlan.ySize()) ||
+              !isDigit(schematics[y][x + 1])) {
             if (hasAdjecentSymbol) {
               int currentNumber = getCurrentNumber(numbers);
               sum += currentNumber;
               log.info("added number: {}, sum: {}", currentNumber, sum);
+              hasAdjecentSymbol = false;
             } else if (!numbers.empty()) {
               int currentNumber = getCurrentNumber(numbers);
               log.info("NOT added number: {}", currentNumber);
               numbers.clear();
             }
-          }
-        } else if (hasAdjecentSymbol) {
-          int currentNumber = getCurrentNumber(numbers);
-          hasAdjecentSymbol = false;
-          sum += currentNumber;
-          log.info("added number: {}, sum: {}", currentNumber, sum);
-        } else {
-          if (!numbers.isEmpty()) {
-            int currentNumber = getCurrentNumber(numbers);
-            log.info("NOT added number: {}", currentNumber);
-            numbers.clear();
           }
         }
       }
