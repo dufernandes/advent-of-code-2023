@@ -1,5 +1,6 @@
 package advent.of.code.year_2023.day_03;
 
+import advent.of.code.year_2023.day_03.data.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -8,7 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 
-import static advent.of.code.year_2023.day_03.Gear.GEAR_SIZE;
+import static advent.of.code.year_2023.day_03.data.Gear.GEAR_SIZE;
 
 @Slf4j
 public class GearRatios {

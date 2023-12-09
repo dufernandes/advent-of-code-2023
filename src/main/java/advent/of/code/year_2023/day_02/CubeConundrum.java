@@ -16,9 +16,9 @@ public class CubeConundrum {
   private static final String COMMA_DELIMITER = ",";
   private static final String SPACE_DELIMITER = " ";
 
-  private static final int RED_CUBES_AVAILABLE = 12;
-  private static final int GREEN_CUBES_AVAILABLE = 13;
-  private static final int BLUE_CUBES_AVAILABLE = 14;
+  static final int RED_CUBES_AVAILABLE = 12;
+  static final int GREEN_CUBES_AVAILABLE = 13;
+  static final int BLUE_CUBES_AVAILABLE = 14;
 
   private static final String RED = "red";
   private static final String GREEN = "green";
