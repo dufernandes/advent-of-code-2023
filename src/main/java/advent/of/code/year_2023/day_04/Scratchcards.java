@@ -24,7 +24,7 @@ public class Scratchcards {
   }
 
   public long getNumberOfScoreCards() throws IOException {
-    InputStream is = GearRatios.class.getResourceAsStream(INPUT_FILE);
+    InputStream is = Scratchcards.class.getResourceAsStream(INPUT_FILE);
 
     Map<Integer, Integer> numberOfCards = new HashMap<>();
     try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
@@ -65,7 +65,7 @@ public class Scratchcards {
 
   public long getScratchcardsPoints() throws IOException {
     long sum = 0;
-    InputStream is = GearRatios.class.getResourceAsStream(INPUT_FILE);
+    InputStream is = Scratchcards.class.getResourceAsStream(INPUT_FILE);
 
     try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
       String line;
