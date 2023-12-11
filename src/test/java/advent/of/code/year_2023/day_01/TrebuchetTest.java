@@ -9,12 +9,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class TrebuchetTest {
 
   @Test
-  void calibrationSumPartOne_whenExecuted_thenResultIs55172() throws IOException {
-    assertEquals(55172, new Trebuchet().calibrationSumPartOne());
+  void calibrationSumPartOne_whenExecuted_thenResultIs142() throws IOException {
+    assertEquals(142, new Trebuchet().calibrationSumPartOne());
   }
 
   @Test
-  void calibrationSumPartTwo_whenExecuted_thenResultIs54925() throws IOException {
-    assertEquals(54925, new Trebuchet().calibrationSumPartTwo());
+  void calibrationSumPartTwo_whenExecuted_thenResultIs281() throws IOException {
+    assertEquals(281, new Trebuchet().calibrationSumPartTwo());
   }
 }

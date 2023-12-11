@@ -11,7 +11,8 @@ import java.io.InputStreamReader;
 public class Trebuchet {
 
   private static final String[] WRITTEN_NUMBERS = new String[]{"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
-  private static final String INPUT_FILE = "/year2023/day_01_input.txt";
+  private static final String INPUT_FILE_A = "/year2023/day_01_a_input.txt";
+  private static final String INPUT_FILE_B = "/year2023/day_01_b_input.txt";
 
   public static void main(String[] args) {
     try {
@@ -26,7 +27,7 @@ public class Trebuchet {
 
     long sum = 0, current = 0, lineNumber = 0;
 
-    InputStream is = this.getClass().getResourceAsStream("/year2023/day_01_input.txt");
+    InputStream is = this.getClass().getResourceAsStream(INPUT_FILE_B);
 
     try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
       String line;
@@ -122,7 +123,7 @@ public class Trebuchet {
 
     long sum = 0, current = 0, lineNumber = 0;
 
-    InputStream is = this.getClass().getResourceAsStream(INPUT_FILE);
+    InputStream is = this.getClass().getResourceAsStream(INPUT_FILE_A);
 
     try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
       String line;

@@ -9,12 +9,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class ScratchcardsTest {
 
   @Test
-  void getScratchcardsPoints_whenExecuted_thenReturn26443() throws IOException {
-    assertEquals(26443, new Scratchcards().getScratchcardsPoints());
+  void getScratchcardsPoints_whenExecuted_thenReturn13() throws IOException {
+    assertEquals(13, new Scratchcards().getScratchcardsPoints());
   }
 
   @Test
-  void getNumberOfScoreCards_whenExecuted_thenReturn6284877() throws IOException {
-    assertEquals(6284877, new Scratchcards().getNumberOfScoreCards());
+  void getNumberOfScoreCards_whenExecuted_thenReturn30() throws IOException {
+    assertEquals(30, new Scratchcards().getNumberOfScoreCards());
   }
 }
