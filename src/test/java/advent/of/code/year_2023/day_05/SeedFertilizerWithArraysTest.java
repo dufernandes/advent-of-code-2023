@@ -9,12 +9,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class SeedFertilizerWithArraysTest {
 
   @Test
-  void findLowestLocation_whenExecuted_thenReturn51752125() throws IOException {
-    assertEquals(51752125, new SeedFertilizerWithArrays().findLowestLocation());
+  void findLowestLocation_whenExecuted_thenReturn35() throws IOException {
+    assertEquals(35, new SeedFertilizerWithArrays().findLowestLocation());
   }
 
   @Test
-  void findLowestLocationForSeedRange_whenExecuted_thenReturn12634632() throws IOException {
-    assertEquals(12634632, new SeedFertilizerWithArrays().findLowestLocationForSeedRange());
+  void findLowestLocationForSeedRange_whenExecuted_thenReturn46() throws IOException {
+    assertEquals(46, new SeedFertilizerWithArrays().findLowestLocationForSeedRange());
   }
 }
