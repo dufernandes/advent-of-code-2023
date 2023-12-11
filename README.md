@@ -9,3 +9,4 @@ Here are some Java solutions for the [Advent of code challenges](https://advento
 - [Day 03 instructions: Gear Ratios](https://adventofcode.com/2023/day/3) - challenge at [day 03 folder](src/main/java/advent/of/code/year_2023/day_03)
 - [Day 04 instructions: Scratchcards](https://adventofcode.com/2023/day/4) - challenge at [day 04 folder](src/main/java/advent/of/code/year_2023/day_04)
 - [Day 05 instructions: If You Give A Seed A Fertilizer](https://adventofcode.com/2023/day/5) - challenge at [day 05 folder](src/main/java/advent/of/code/year_2023/day_05)
+- [Day 06 instructions: Wait For It](https://adventofcode.com/2023/day/6) - challenge at [day 05 folder](src/main/java/advent/of/code/year_2023/day_06)
