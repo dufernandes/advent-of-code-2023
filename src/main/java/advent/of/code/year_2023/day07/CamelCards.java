@@ -33,16 +33,32 @@ public class CamelCards {
           entry('A', 12)
   );
 
+  private static final Map<Character, Integer> CARD_STRENGTH_WITH_JOKER = Map.ofEntries(
+          entry('J', 0),
+          entry('2', 1),
+          entry('3', 2),
+          entry('4', 3),
+          entry('5', 4),
+          entry('6', 5),
+          entry('7', 6),
+          entry('8', 7),
+          entry('9', 8),
+          entry('T', 9),
+          entry('Q', 10),
+          entry('K', 11),
+          entry('A', 12)
+  );
+
   public static void main(String[] args) {
     try {
-      log.info("The result for part one is: {}", new CamelCards().findLowestLocation());
-      //log.info("The result of part two is: {}", new CamelCards().findLowestLocationForSeedRange());
+      log.info("The result for part one is: {}", new CamelCards().findTotalWinnings());
+      log.info("The result of part two is: {}", new CamelCards().findTotalWinningsWithJoker());
     } catch (IOException ioe) {
       log.error("error while opening input file", ioe);
     }
   }
 
-  public long findLowestLocation() throws IOException {
+  public long findTotalWinnings() throws IOException {
     List<HandBid> handBids = new ArrayList<>();
     InputStream is = SeedFertilizer.class.getResourceAsStream(INPUT_FILE);
 
@@ -57,6 +73,32 @@ public class CamelCards {
     }
 
     handBids.sort(new HandBidComparator(CARD_STRENGTH));
+
+    long winnings = 0;
+    int counter = 1;
+    for (HandBid handBid : handBids) {
+      winnings += counter * handBid.bid;
+      counter++;
+    }
+
+    return winnings;
+  }
+
+  public long findTotalWinningsWithJoker() throws IOException {
+    List<HandBid> handBids = new ArrayList<>();
+    InputStream is = SeedFertilizer.class.getResourceAsStream(INPUT_FILE);
+
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+      String line;
+      while ((line = br.readLine()) != null) {
+        String hand = line.split("\\s+")[0];
+        long bid = Long.parseLong(line.split("\\s+")[1]);
+        HandType handType = getHandTypeWithJoker(hand);
+        handBids.add(new HandBid(handType, hand, bid));
+      }
+    }
+
+    handBids.sort(new HandBidComparator(CARD_STRENGTH_WITH_JOKER));
 
     long winnings = 0;
     int counter = 1;
@@ -95,9 +137,37 @@ public class CamelCards {
     }
   }
 
+  private HandType getHandTypeWithJoker(String hand) {
+
+    String handWithJoker = replaceJoker(hand);
+
+    final Map<Character, Integer> cards = getCardsFrequency(handWithJoker);
+
+    return getHandType(hand, cards);
+  }
+
+  private static String replaceJoker(String hand) {
+    final Map<Character, Integer> cardsTemp = getCardsFrequency(hand);
+
+    int maxFrequency = cardsTemp.values().stream().reduce(Integer::max).orElseThrow(NoSuchElementException::new);
+    Character keyWithMostFrequency = cardsTemp.keySet().stream().filter(currentKey -> maxFrequency == cardsTemp.get(currentKey)).findAny().orElseThrow(NoSuchElementException::new);
+    if (keyWithMostFrequency == 'J') {
+      cardsTemp.remove('J');
+      int maxFrequencySecond = cardsTemp.values().stream().reduce(Integer::max).orElse(0);
+      if (maxFrequencySecond > 0) {
+        keyWithMostFrequency = cardsTemp.keySet().stream().filter(currentKey -> maxFrequencySecond == cardsTemp.get(currentKey)).findAny().orElse(null);
+      }
+    }
+    return keyWithMostFrequency != null && keyWithMostFrequency != 'J' ? hand.replace('J', keyWithMostFrequency) : hand;
+  }
+
   private HandType getHandType(String hand) {
     Map<Character, Integer> cards = getCardsFrequency(hand);
 
+    return getHandType(hand, cards);
+  }
+
+  private static HandType getHandType(String hand, Map<Character, Integer> cards) {
     if (cards.containsValue(5)) {
       return HandType.FiveOfKing;
     }
@@ -162,5 +232,6 @@ public class CamelCards {
     }
   }
 
-  private record HandBid(HandType handType, String hand, long bid) {}
+  private record HandBid(HandType handType, String hand, long bid) {
+  }
 }
