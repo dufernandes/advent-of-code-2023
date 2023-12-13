@@ -11,3 +11,4 @@ Here are some Java solutions for the [Advent of code challenges](https://advento
 - [Day 05 instructions: If You Give A Seed A Fertilizer](https://adventofcode.com/2023/day/5) - challenge at [day 05 folder](src/main/java/advent/of/code/year_2023/day05)
 - [Day 06 instructions: Wait For It](https://adventofcode.com/2023/day/6) - challenge at [day 06 folder](src/main/java/advent/of/code/year_2023/day06)
 - [Day 07 instructions: Camel Cards](https://adventofcode.com/2023/day/7) - challenge at [day 07 folder](src/main/java/advent/of/code/year_2023/day07)
+- [Day 07 instructions: Haunted Wasteland](https://adventofcode.com/2023/day/8) - challenge at [day 08 folder](src/main/java/advent/of/code/year_2023/day08)
