@@ -43,8 +43,7 @@ public class MirageMaintenance {
          for (i = 1; i < input.length + 1; i++) {
           boolean areAllZeros = true;
           for (j = 0; j < innerLength; j++) {
-            predictionDataset[i][j] = Math
-                    .abs(predictionDataset[i - 1][j + 1] - predictionDataset[i - 1][j]);
+            predictionDataset[i][j] = predictionDataset[i - 1][j + 1] - predictionDataset[i - 1][j];
             if (predictionDataset[i][j] != 0) {
               areAllZeros = false;
             }
