@@ -35,7 +35,6 @@ public class WaitForIt {
       line = br.readLine();
       long distance = getLongFromArray(line);
 
-      long winnerPossibilities = 0;
       for (long buttonPressedTime = 0; buttonPressedTime <= time; buttonPressedTime++) {
         long speed = buttonPressedTime;
         long travelledDistanced = speed * (time - buttonPressedTime);

@@ -49,7 +49,6 @@ public class CubeConundrum {
       String line;
       while ((line = br.readLine()) != null) {
         String[] idGames = line.split(COLUMN_DELIMITER);
-        int gameId = getGameId(idGames[ID_TEXT_INDEX]);
 
         int maxRed = 0, maxGreen = 0, maxBlue = 0;
         String[] gamesText = idGames[GAME_INDEX].split(SEMICOLON_DELIMITER);
