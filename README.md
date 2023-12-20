@@ -31,3 +31,4 @@ Here are some Java solutions for the [Advent of code challenges](https://advento
 
 ### Day 10 references for part 2
 - [Point in polygon](https://en.wikipedia.org/wiki/Point_in_polygon)
+- [Even–odd rule](https://en.wikipedia.org/wiki/Even%E2%80%93odd_rule)
