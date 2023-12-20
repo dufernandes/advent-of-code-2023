@@ -1,6 +1,6 @@
 # Advent of code
 
-![Build and tests state](https://github.com/dufernandes/advent-of-code/actions/workflows/maven.yml/badge.svg)
+![Build and tests state](https://github.com/dufernandes/advent-of-code/actions/workflows/maven.yml/badge.svg?branch=main)
 
 Here are some Java solutions for the [Advent of code challenges](https://adventofcode.com/). Each challenge can be run using the `public static main(String[] args)` method, or by running `mvn clean verify`, which run all tests. These tests call all methods which solve the problems at hand.
 
