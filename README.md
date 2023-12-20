@@ -13,3 +13,11 @@ Here are some Java solutions for the [Advent of code challenges](https://advento
 - [Day 07 instructions: Camel Cards](https://adventofcode.com/2023/day/7) - challenge at [day 07 folder](src/main/java/advent/of/code/year_2023/day07)
 - [Day 08 instructions: Haunted Wasteland](https://adventofcode.com/2023/day/8) - challenge at [day 08 folder](src/main/java/advent/of/code/year_2023/day08)
 - [Day 09 instructions: Mirage Maintenance](https://adventofcode.com/2023/day/9) - challenge at [day 09 folder](src/main/java/advent/of/code/year_2023/day09)
+
+## References
+
+- [LCM Calculator - Least Common Multiple](https://www.calculatorsoup.com/calculators/math/lcm.php)
+- [Program to find LCM of two numbers](https://www.geeksforgeeks.org/program-to-find-lcm-of-two-numbers/)
+- [Greatest common divisor](https://en.wikipedia.org/wiki/Greatest_common_divisor)
+- [Depth First Search in Java](https://www.baeldung.com/java-depth-first-search)
+- [Java Program to Check Whether Undirected Graph is Connected Using DFS](https://www.geeksforgeeks.org/java-program-to-check-whether-undirected-graph-is-connected-using-dfs/)
