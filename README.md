@@ -16,8 +16,16 @@ Here are some Java solutions for the [Advent of code challenges](https://advento
 
 ## References
 
+### Day 08 references
+
 - [LCM Calculator - Least Common Multiple](https://www.calculatorsoup.com/calculators/math/lcm.php)
 - [Program to find LCM of two numbers](https://www.geeksforgeeks.org/program-to-find-lcm-of-two-numbers/)
 - [Greatest common divisor](https://en.wikipedia.org/wiki/Greatest_common_divisor)
+
+### Day 10 references for part 1
+
 - [Depth First Search in Java](https://www.baeldung.com/java-depth-first-search)
 - [Java Program to Check Whether Undirected Graph is Connected Using DFS](https://www.geeksforgeeks.org/java-program-to-check-whether-undirected-graph-is-connected-using-dfs/)
+
+### Day 10 references for part 2
+- [Point in polygon](https://en.wikipedia.org/wiki/Point_in_polygon)
