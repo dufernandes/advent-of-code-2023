@@ -24,10 +24,28 @@ public class PipeMaze {
   public static void main(String[] args) {
     try {
       log.info("The result for part one is: {}", new PipeMaze().findFarthestPoint());
-      log.info("The result of part two is: {}", new PipeMaze().findFarthestPoint());
+      log.info("The result of part two is: {}", new PipeMaze().getNumberOfEnclosedTiles());
     } catch (IOException ioe) {
       log.error("error while opening input file", ioe);
     }
+  }
+
+  public long getNumberOfEnclosedTiles() throws IOException {
+    Area areaAndVertexCount = mapInputIntoAreaArray();
+    char[][][] area = areaAndVertexCount.area();
+
+    log.info("area");
+    print2D(area);
+
+    Graph graph = new Graph(areaAndVertexCount.numberOfVertices);
+    int sVertexName = populateGraph(area, graph);
+
+    DepthFirstPaths depthFirstPaths = new DepthFirstPaths(graph, sVertexName);
+
+    log.info("graph " + graph);
+    log.info("path " + depthFirstPaths);
+
+    return depthFirstPaths.cycleSize / 2;
   }
 
   public long findFarthestPoint() throws IOException {
@@ -54,67 +72,46 @@ public class PipeMaze {
     int xLength = area[0].length;
     for (int i = 0; i < yLength; i++) {
       for (int j = 0; j < xLength; j++) {
-        char element = area[i][j][PIPE_TYPE_INDEX];
+        char element = getAreaElementPipeType(i, j, area);
         if (element != DOT) {
-          int vertex = area[i][j][VERTEX_NAME_INDEX];
+          int vertex = getAreaElementVertexName(i, j, area);
           int[] adjacents = switch (element) {
             case '|' -> { // is a vertical pipe connecting north and south
-              int adjA = i - 1 >= 0 ? area[i - 1][j][VERTEX_NAME_INDEX] : INVALID_NUMBER;
-              int adjB = i + 1 < yLength ? area[i + 1][j][VERTEX_NAME_INDEX] : INVALID_NUMBER;
+              int adjA = i - 1 >= 0 ? getAreaElementVertexNameOnTop(area, i, j) : INVALID_NUMBER;
+              int adjB = i + 1 < yLength ? getAreaElementVertexNameOnTheBottom(area, i, j) : INVALID_NUMBER;
               yield new int[]{adjA, adjB};
             }
             case '-' -> { // is a horizontal pipe connecting east and west.
-              int adjA = j - 1 >= 0 ? area[i][j - 1][VERTEX_NAME_INDEX] : INVALID_NUMBER;
-              int adjB = j + 1 < xLength ? area[i][j + 1][VERTEX_NAME_INDEX] : INVALID_NUMBER;
+              int adjA = j - 1 >= 0 ? getAreaElementVertexNameOnTheLeft(area, i, j) : INVALID_NUMBER;
+              int adjB = j + 1 < xLength ? getAreaElementVertexNameOnTheRight(area, i, j) : INVALID_NUMBER;
               yield new int[]{adjA, adjB};
             }
             case 'L' -> { // is a 90-degree bend connecting north and east.
-              int adjA = i - 1 >= 0 ? area[i - 1][j][VERTEX_NAME_INDEX] : INVALID_NUMBER;
-              int adjB = j + 1 < xLength ? area[i][j + 1][VERTEX_NAME_INDEX] : INVALID_NUMBER;
+              int adjA = i - 1 >= 0 ? getAreaElementVertexNameOnTop(area, i, j) : INVALID_NUMBER;
+              int adjB = j + 1 < xLength ? getAreaElementVertexNameOnTheRight(area, i, j) : INVALID_NUMBER;
               yield new int[]{adjA, adjB};
             }
             case 'J' -> { // is a 90-degree bend connecting north and west.
-              int adjA = i - 1 >= 0 ? area[i - 1][j][VERTEX_NAME_INDEX] : INVALID_NUMBER;
-              int adjB = j - 1 >= 0 ? area[i][j - 1][VERTEX_NAME_INDEX] : INVALID_NUMBER;
+              int adjA = i - 1 >= 0 ? getAreaElementVertexNameOnTop(area, i, j) : INVALID_NUMBER;
+              int adjB = j - 1 >= 0 ? getAreaElementVertexNameOnTheLeft(area, i, j) : INVALID_NUMBER;
               yield new int[]{adjA, adjB};
             }
             case '7' -> { // is a 90-degree bend connecting south and west.
-              int adjA = i + 1 < yLength ? area[i + 1][j][VERTEX_NAME_INDEX] : INVALID_NUMBER;
-              int adjB = j - 1 >= 0 ? area[i][j - 1][VERTEX_NAME_INDEX] : INVALID_NUMBER;
+              int adjA = i + 1 < yLength ? getAreaElementVertexNameOnTheBottom(area, i, j) : INVALID_NUMBER;
+              int adjB = j - 1 >= 0 ? getAreaElementVertexNameOnTheLeft(area, i, j) : INVALID_NUMBER;
               yield new int[]{adjA, adjB};
             }
             case 'F' -> { // is a 90-degree bend connecting south and east.
-              int adjA = i + 1 < yLength ? area[i + 1][j][VERTEX_NAME_INDEX] : INVALID_NUMBER;
-              int adjB = j + 1 < xLength ? area[i][j + 1][VERTEX_NAME_INDEX] : INVALID_NUMBER;
+              int adjA = i + 1 < yLength ? getAreaElementVertexNameOnTheBottom(area, i, j) : INVALID_NUMBER;
+              int adjB = j + 1 < xLength ? getAreaElementVertexNameOnTheRight(area, i, j) : INVALID_NUMBER;
               yield new int[]{adjA, adjB};
             }
             case S -> { // is the starting position of the animal; there is a pipe on this
-              sVertexName = area[i][j][VERTEX_NAME_INDEX];
-              int adjA = INVALID_NUMBER, adjB = INVALID_NUMBER;
-              for (int y = i - 1; y <= i + 1; y++) {
-                for (int x = j - 1; x <= j + 1; x++) {
-                  if ((x < 0 || y < 0)
-                          || (y == i - 1 && x == j - 1)
-                          || (y == i + 1 && x == j - 1)
-                          || (y == i + 1 && x == j + 1)
-                          || (y == i - 1 && x == j + 1)) {
-                    continue;
-                  }
-                  if (area[y][x][PIPE_TYPE_INDEX] != DOT && area[y][x][PIPE_TYPE_INDEX] != S) {
-                    if (adjA == INVALID_NUMBER) {
-                      adjA = area[y][x][VERTEX_NAME_INDEX];
-                    } else {
-                      adjB = area[y][x][VERTEX_NAME_INDEX];
-                    }
-                  }
-                }
-              }
-
-              yield new int[]{adjA, adjB};
+              sVertexName = getAreaElementVertexName(i, j, area);
+              yield inferSAdjacentElements(area, i, j);
             }
-            case DOT -> { // is ground; there is no pipe in this tile.
-              yield new int[]{INVALID_NUMBER, INVALID_NUMBER};
-            }
+            case DOT -> // is ground; there is no pipe in this tile.
+                    new int[]{INVALID_NUMBER, INVALID_NUMBER};
             default -> {
               throw new RuntimeException("invalid graph element: " + element);
             }
@@ -132,6 +129,30 @@ public class PipeMaze {
     return sVertexName;
   }
 
+  private static int[] inferSAdjacentElements(char[][][] area, int i, int j) {
+    int adjA = INVALID_NUMBER, adjB = INVALID_NUMBER;
+    for (int y = i - 1; y <= i + 1; y++) {
+      for (int x = j - 1; x <= j + 1; x++) {
+        if ((x < 0 || y < 0)
+                || (y == i - 1 && x == j - 1)
+                || (y == i + 1 && x == j - 1)
+                || (y == i + 1 && x == j + 1)
+                || (y == i - 1 && x == j + 1)) {
+          continue;
+        }
+        if (getAreaElementPipeType(y, x, area) != DOT && getAreaElementPipeType(y, x, area) != S) {
+          if (adjA == INVALID_NUMBER) {
+            adjA = getAreaElementVertexName(y, x, area);
+          } else {
+            adjB = getAreaElementVertexName(y, x, area);
+          }
+        }
+      }
+    }
+
+    return new int[]{adjA, adjB};
+  }
+
   private static void print2D(char[][][] mat)
   {
     for (char[][] rows : mat) {
@@ -140,7 +161,7 @@ public class PipeMaze {
 
         builder.append("(").append(innerRow[0]).append(" ").append((int) innerRow[1]).append(")");
       }
-      // System.out.println(builder);
+      System.out.println(builder);
     }
   }
 
@@ -166,17 +187,48 @@ public class PipeMaze {
         for (int i = 0; i < xSize; i++) {
           char element = line.charAt(i);
           if (element != DOT) {
-            area[counter][i][VERTEX_NAME_INDEX] = (char) numberOfVertexes++;
+            setAreaVertexName(counter, i, area, (char) numberOfVertexes++);
           } else {
-            area[counter][i][VERTEX_NAME_INDEX] = (char) INVALID_NUMBER;
+            setAreaVertexName(counter, i, area, (char) INVALID_NUMBER);
           }
-
-          area[counter][i][PIPE_TYPE_INDEX] = element;
+          setAreaPipeType(counter, i, area, element);
         }
         counter++;
       }
     }
     return new Area(area, numberOfVertexes);
+  }
+
+  private static int getAreaElementVertexNameOnTheRight(char[][][] area, int i, int j) {
+    return getAreaElementVertexName(i, j + 1, area);
+  }
+
+  private static int getAreaElementVertexNameOnTheLeft(char[][][] area, int i, int j) {
+    return getAreaElementVertexName(i, j - 1, area);
+  }
+
+  private static int getAreaElementVertexNameOnTheBottom(char[][][] area, int i, int j) {
+    return getAreaElementVertexName(i + 1, j, area);
+  }
+
+  private static int getAreaElementVertexNameOnTop(char[][][] area, int i, int j) {
+    return getAreaElementVertexName(i - 1, j, area);
+  }
+
+  private static int getAreaElementVertexName(int y, int x, char[][][] area) {
+    return area[y][x][VERTEX_NAME_INDEX];
+  }
+
+  private static void setAreaVertexName(int y, int x, char[][][] area, char vertexName) {
+    area[y][x][VERTEX_NAME_INDEX] = vertexName;
+  }
+
+  private static char getAreaElementPipeType(int y, int x, char[][][] area) {
+    return area[y][x][PIPE_TYPE_INDEX];
+  }
+
+  private static void setAreaPipeType(int y, int x, char[][][] area, char pipeType) {
+    area[y][x][PIPE_TYPE_INDEX] = pipeType;
   }
 
   @ToString
