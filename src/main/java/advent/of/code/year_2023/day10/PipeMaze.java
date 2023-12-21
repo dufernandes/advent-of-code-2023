@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 public class PipeMaze {
@@ -57,16 +59,42 @@ public class PipeMaze {
 
           int vertex = getAreaElementVertexName(i, x, area);
           if (element == S) {
-            if (isValidNumber(getAreaElementVertexNameOnTopIfExists(area, i, x))
-                    && isValidNumber(getAreaElementVertexNameOnTheRightIfExists(area, i, x, xLength))) {
+            int vertexA = getAreaElementVertexNameOnTopIfExists(area, i, x);
+            int vertexB = getAreaElementVertexNameOnTheRightIfExists(area, i, x, xLength);
+            if (isValidNumber(vertexA)
+                    && StreamSupport.stream(graph.adj(sVertexName).spliterator(), false)
+                      .anyMatch(v -> v == vertexA)
+                    && isValidNumber(vertexB) && StreamSupport
+                      .stream(graph.adj(sVertexName).spliterator(), false)
+                      .anyMatch(v -> v == vertexB)) {
               element = 'L';
             }
 
-            if (isValidNumber(getAreaElementVertexNameOnTopIfExists(area, i, x))
-              && isValidNumber(getAreaElementVertexNameOnTheLeftIfExists(area, i, x))) {
+            int vertexA2 = getAreaElementVertexNameOnTopIfExists(area, i, x);
+            int vertexB2 = getAreaElementVertexNameOnTheLeftIfExists(area, i, x);
+            if (isValidNumber(vertexA2)
+                    && StreamSupport.stream(graph.adj(sVertexName).spliterator(), false)
+                      .anyMatch(v -> v == vertexA2)
+                    && isValidNumber(vertexB2)
+                    && StreamSupport
+                      .stream(graph.adj(sVertexName).spliterator(), false)
+                      .anyMatch(v -> v == vertexB2)) {
               element = 'J';
             }
+
+            int vertexA3 = getAreaElementVertexNameOnTheRightIfExists(area, i, x, xLength);
+            int vertexB3 = getAreaElementVertexNameOnTheLeftIfExists(area, i, x);
+            if (isValidNumber(vertexA3)
+                    && StreamSupport.stream(graph.adj(sVertexName).spliterator(), false)
+                    .anyMatch(v -> v == vertexA3)
+                    && isValidNumber(vertexB3)
+                    && StreamSupport
+                    .stream(graph.adj(sVertexName).spliterator(), false)
+                    .anyMatch(v -> v == vertexB3)) {
+              element = '-';
+            }
           }
+
           if (depthFirstPaths.hasPathTo(vertex)) {
             if (element != '-'
                     && element != 'J'
@@ -77,6 +105,7 @@ public class PipeMaze {
         }
         if (numberOfVertexesInRow % 2 != 0) {
           enclosedTiles++;
+          // log.info("added element position {}, {}", i, j);
         }
       }
     }
@@ -138,7 +167,7 @@ public class PipeMaze {
             }
             case S -> { // is the starting position of the animal; there is a pipe on this
               sVertexName = getAreaElementVertexName(i, j, area);
-              yield inferSAdjacentElements(area, i, j);
+              yield inferSAdjacentElements(area, i, j, yLength, xLength);
             }
             case DOT -> // is ground; there is no pipe in this tile.
                     returnInvalidVertexes();
@@ -159,23 +188,61 @@ public class PipeMaze {
     return sVertexName;
   }
 
-  private static int[] inferSAdjacentElements(char[][][] area, int i, int j) {
+  private static int[] inferSAdjacentElements(char[][][] area, int i, int j, int yLength, int xLength) {
     int adjA = INVALID_NUMBER, adjB = INVALID_NUMBER;
-    for (int y = i - 1; y <= i + 1; y++) {
-      for (int x = j - 1; x <= j + 1; x++) {
-        if ((x < 0 || y < 0)
-                || (y == i - 1 && x == j - 1)
-                || (y == i + 1 && x == j - 1)
-                || (y == i + 1 && x == j + 1)
-                || (y == i - 1 && x == j + 1)) {
-          continue;
+
+    int vertexName;
+    char pipe;
+    if (j + 1 < xLength) {
+      pipe = getAreaElementPipeType(i, j + 1, area);
+      if (pipe == '-'
+              || pipe == 'J'
+              || pipe == '7') {
+        adjA = getAreaElementVertexName(i, j + 1, area);
+      }
+    }
+
+    if (j > 0) {
+      pipe = getAreaElementPipeType(i, j - 1, area);
+      if (pipe == '-'
+              || pipe == 'L'
+              || pipe == 'F') {
+
+        vertexName = getAreaElementVertexName(i, j - 1, area);
+        if (!isValidNumber(adjA)) {
+          adjA = vertexName;
+        } else {
+          adjB = vertexName;
         }
-        if (getAreaElementPipeType(y, x, area) != DOT && getAreaElementPipeType(y, x, area) != S) {
-          if (isValidNumber(adjA)) {
-            adjA = getAreaElementVertexName(y, x, area);
-          } else {
-            adjB = getAreaElementVertexName(y, x, area);
-          }
+      }
+    }
+
+    if (i > 0) {
+      pipe = getAreaElementPipeType(i - 1, j, area);
+      if (pipe == '|'
+              || pipe == '7'
+              || pipe == 'F') {
+
+        vertexName = getAreaElementVertexName(i - 1, j, area);
+        if (!isValidNumber(adjA)) {
+          adjA = vertexName;
+        } else {
+          adjB = vertexName;
+        }
+      }
+    }
+
+    if (i + 1 < yLength) {
+      pipe = getAreaElementPipeType(i + 1, j, area);
+      if (pipe == '|'
+              || pipe == 'L'
+              || pipe == 'J') {
+
+        vertexName = getAreaElementVertexName(i + 1, j, area);
+        if (!isValidNumber(adjA)) {
+          adjA = vertexName;
+        } else {
+          adjB = vertexName;
         }
       }
     }
