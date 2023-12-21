@@ -15,6 +15,7 @@ Here are some Java solutions for the [Advent of code challenges](https://advento
 - [Day 07 instructions: Camel Cards](https://adventofcode.com/2023/day/7) - challenge at [day 07 folder](src/main/java/advent/of/code/year_2023/day07)
 - [Day 08 instructions: Haunted Wasteland](https://adventofcode.com/2023/day/8) - challenge at [day 08 folder](src/main/java/advent/of/code/year_2023/day08)
 - [Day 09 instructions: Mirage Maintenance](https://adventofcode.com/2023/day/9) - challenge at [day 09 folder](src/main/java/advent/of/code/year_2023/day09)
+- [Day 09 instructions: Pipe Maze](https://adventofcode.com/2023/day/10) - challenge at [day 10 folder](src/main/java/advent/of/code/year_2023/day10)
 
 ## References
 
