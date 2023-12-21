@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 @Slf4j
@@ -41,6 +40,13 @@ public class PipeMaze {
 
     DepthFirstPaths depthFirstPaths = new DepthFirstPaths(graph, sVertexName);
 
+    return calculateAreaWithinGraph(area, depthFirstPaths, graph, sVertexName);
+  }
+
+  /**
+   * For this calculation the Even-Odd rule was used. It is equivalent to the point in polygon theorem
+   */
+  private static int calculateAreaWithinGraph(char[][][] area, DepthFirstPaths depthFirstPaths, Graph graph, int sVertexName) {
     int enclosedTiles = 0;
     int yLength = area.length;
     int xLength = area[0].length;
@@ -59,40 +65,7 @@ public class PipeMaze {
 
           int vertex = getAreaElementVertexName(i, x, area);
           if (element == S) {
-            int vertexA = getAreaElementVertexNameOnTopIfExists(area, i, x);
-            int vertexB = getAreaElementVertexNameOnTheRightIfExists(area, i, x, xLength);
-            if (isValidNumber(vertexA)
-                    && StreamSupport.stream(graph.adj(sVertexName).spliterator(), false)
-                      .anyMatch(v -> v == vertexA)
-                    && isValidNumber(vertexB) && StreamSupport
-                      .stream(graph.adj(sVertexName).spliterator(), false)
-                      .anyMatch(v -> v == vertexB)) {
-              element = 'L';
-            }
-
-            int vertexA2 = getAreaElementVertexNameOnTopIfExists(area, i, x);
-            int vertexB2 = getAreaElementVertexNameOnTheLeftIfExists(area, i, x);
-            if (isValidNumber(vertexA2)
-                    && StreamSupport.stream(graph.adj(sVertexName).spliterator(), false)
-                      .anyMatch(v -> v == vertexA2)
-                    && isValidNumber(vertexB2)
-                    && StreamSupport
-                      .stream(graph.adj(sVertexName).spliterator(), false)
-                      .anyMatch(v -> v == vertexB2)) {
-              element = 'J';
-            }
-
-            int vertexA3 = getAreaElementVertexNameOnTheRightIfExists(area, i, x, xLength);
-            int vertexB3 = getAreaElementVertexNameOnTheLeftIfExists(area, i, x);
-            if (isValidNumber(vertexA3)
-                    && StreamSupport.stream(graph.adj(sVertexName).spliterator(), false)
-                    .anyMatch(v -> v == vertexA3)
-                    && isValidNumber(vertexB3)
-                    && StreamSupport
-                    .stream(graph.adj(sVertexName).spliterator(), false)
-                    .anyMatch(v -> v == vertexB3)) {
-              element = '-';
-            }
+            element = inferSPipeType(area, i, x, xLength, graph, sVertexName, element);
           }
 
           if (depthFirstPaths.hasPathTo(vertex)) {
@@ -105,12 +78,33 @@ public class PipeMaze {
         }
         if (numberOfVertexesInRow % 2 != 0) {
           enclosedTiles++;
-          // log.info("added element position {}, {}", i, j);
         }
       }
     }
 
     return enclosedTiles;
+  }
+
+  private static char inferSPipeType(char[][][] area, int i, int x, int xLength, Graph graph, int sVertexName, char element) {
+    element = assignPipeTypeIfApplicable(getAreaElementVertexNameOnTopIfExists(area, i, x), getAreaElementVertexNameOnTheRightIfExists(area, i, x, xLength), graph, sVertexName, element, 'L');
+
+    element = assignPipeTypeIfApplicable(getAreaElementVertexNameOnTopIfExists(area, i, x), getAreaElementVertexNameOnTheLeftIfExists(area, i, x), graph, sVertexName, element, 'J');
+
+    element = assignPipeTypeIfApplicable(getAreaElementVertexNameOnTheRightIfExists(area, i, x, xLength), getAreaElementVertexNameOnTheLeftIfExists(area, i, x), graph, sVertexName, element, '-');
+
+    return element;
+  }
+
+  private static char assignPipeTypeIfApplicable(int vertexNameA, int vertexNameB, Graph graph, int sVertexName, char element, char L) {
+    if (isValidNumber(vertexNameA)
+            && StreamSupport.stream(graph.adj(sVertexName).spliterator(), false)
+            .anyMatch(v -> v == vertexNameA)
+            && isValidNumber(vertexNameB) && StreamSupport
+            .stream(graph.adj(sVertexName).spliterator(), false)
+            .anyMatch(v -> v == vertexNameB)) {
+      element = L;
+    }
+    return element;
   }
 
   public long findFarthestPoint() throws IOException {
