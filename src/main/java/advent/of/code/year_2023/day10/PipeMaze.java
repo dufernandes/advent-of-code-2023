@@ -34,16 +34,10 @@ public class PipeMaze {
     Area areaAndVertexCount = mapInputIntoAreaArray();
     char[][][] area = areaAndVertexCount.area();
 
-    // log.info("area");
-    // print2D(area);
-
     Graph graph = new Graph(areaAndVertexCount.numberOfVertices);
     int sVertexName = populateGraph(area, graph);
 
     DepthFirstPaths depthFirstPaths = new DepthFirstPaths(graph, sVertexName);
-
-    // log.info("graph " + graph);
-    // log.info("path " + depthFirstPaths);
 
     int enclosedTiles = 0;
     int yLength = area.length;
@@ -94,16 +88,10 @@ public class PipeMaze {
     Area areaAndVertexCount = mapInputIntoAreaArray();
     char[][][] area = areaAndVertexCount.area();
 
-    // log.info("area");
-    // print2D(area);
-
     Graph graph = new Graph(areaAndVertexCount.numberOfVertices);
     int sVertexName = populateGraph(area, graph);
 
     DepthFirstPaths depthFirstPaths = new DepthFirstPaths(graph, sVertexName);
-
-    // log.info("graph " + graph);
-    // log.info("path " + depthFirstPaths);
 
     return depthFirstPaths.cycleSize / 2;
   }
