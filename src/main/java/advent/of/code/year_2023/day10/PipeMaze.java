@@ -19,7 +19,7 @@ public class PipeMaze {
   private static final char S = 'S';
   private static final int VERTEX_NAME_INDEX = 1;
   private static final int PIPE_TYPE_INDEX = 0;
-  private static final int INVALID_NUMBER = Integer.MIN_VALUE;
+  private static final int INVALID_NUMBER = Character.MAX_VALUE;
 
   public static void main(String[] args) {
     try {
@@ -34,34 +34,76 @@ public class PipeMaze {
     Area areaAndVertexCount = mapInputIntoAreaArray();
     char[][][] area = areaAndVertexCount.area();
 
-    log.info("area");
-    print2D(area);
+    // log.info("area");
+    // print2D(area);
 
     Graph graph = new Graph(areaAndVertexCount.numberOfVertices);
     int sVertexName = populateGraph(area, graph);
 
     DepthFirstPaths depthFirstPaths = new DepthFirstPaths(graph, sVertexName);
 
-    log.info("graph " + graph);
-    log.info("path " + depthFirstPaths);
+    // log.info("graph " + graph);
+    // log.info("path " + depthFirstPaths);
 
-    return depthFirstPaths.cycleSize / 2;
+    int enclosedTiles = 0;
+    int yLength = area.length;
+    int xLength = area[0].length;
+    for (int i = 0; i < yLength; i++) {
+      for (int j = 0; j < xLength; j++) {
+        if (depthFirstPaths.hasPathTo(getAreaElementVertexName(i, j, area))) {
+          continue;
+        }
+
+        int numberOfVertexesInRow = 0;
+        for (int x = j + 1; x < xLength; x++) {
+          char element = getAreaElementPipeType(i, x, area);
+          if (element == DOT) {
+            continue;
+          }
+
+          int vertex = getAreaElementVertexName(i, x, area);
+          if (element == S) {
+            if (isValidNumber(getAreaElementVertexNameOnTopIfExists(area, i, x))
+                    && isValidNumber(getAreaElementVertexNameOnTheRightIfExists(area, i, x, xLength))) {
+              element = 'L';
+            }
+
+            if (isValidNumber(getAreaElementVertexNameOnTopIfExists(area, i, x))
+              && isValidNumber(getAreaElementVertexNameOnTheLeftIfExists(area, i, x))) {
+              element = 'J';
+            }
+          }
+          if (depthFirstPaths.hasPathTo(vertex)) {
+            if (element != '-'
+                    && element != 'J'
+                    && element != 'L') {
+              numberOfVertexesInRow++;
+            }
+          }
+        }
+        if (numberOfVertexesInRow % 2 != 0) {
+          enclosedTiles++;
+        }
+      }
+    }
+
+    return enclosedTiles;
   }
 
   public long findFarthestPoint() throws IOException {
     Area areaAndVertexCount = mapInputIntoAreaArray();
     char[][][] area = areaAndVertexCount.area();
 
-    log.info("area");
-    print2D(area);
+    // log.info("area");
+    // print2D(area);
 
     Graph graph = new Graph(areaAndVertexCount.numberOfVertices);
     int sVertexName = populateGraph(area, graph);
 
     DepthFirstPaths depthFirstPaths = new DepthFirstPaths(graph, sVertexName);
 
-    log.info("graph " + graph);
-    log.info("path " + depthFirstPaths);
+    // log.info("graph " + graph);
+    // log.info("path " + depthFirstPaths);
 
     return depthFirstPaths.cycleSize / 2;
   }
@@ -82,28 +124,28 @@ public class PipeMaze {
               yield new int[]{adjA, adjB};
             }
             case '-' -> { // is a horizontal pipe connecting east and west.
-              int adjA = getAreaElementVertexNameOnTheLeftIfExists(area, j, i);
-              int adjB = getAreaElementVertexNameOnTheRightIfExists(area, j, xLength, i);
+              int adjA = getAreaElementVertexNameOnTheLeftIfExists(area, i, j);
+              int adjB = getAreaElementVertexNameOnTheRightIfExists(area, i, j, xLength);
               yield new int[]{adjA, adjB};
             }
             case 'L' -> { // is a 90-degree bend connecting north and east.
               int adjA = getAreaElementVertexNameOnTopIfExists(area, i, j);
-              int adjB = getAreaElementVertexNameOnTheRightIfExists(area, j, xLength, i);
+              int adjB = getAreaElementVertexNameOnTheRightIfExists(area, i, j, xLength);
               yield new int[]{adjA, adjB};
             }
             case 'J' -> { // is a 90-degree bend connecting north and west.
               int adjA = getAreaElementVertexNameOnTopIfExists(area, i, j);
-              int adjB = getAreaElementVertexNameOnTheLeftIfExists(area, j, i);
+              int adjB = getAreaElementVertexNameOnTheLeftIfExists(area, i, j);
               yield new int[]{adjA, adjB};
             }
             case '7' -> { // is a 90-degree bend connecting south and west.
               int adjA = getAreaElementVertexNameOnTheBottomIfExists(area, i, yLength, j);
-              int adjB = getAreaElementVertexNameOnTheLeftIfExists(area, j, i);
+              int adjB = getAreaElementVertexNameOnTheLeftIfExists(area, i, j);
               yield new int[]{adjA, adjB};
             }
             case 'F' -> { // is a 90-degree bend connecting south and east.
               int adjA = getAreaElementVertexNameOnTheBottomIfExists(area, i, yLength, j);
-              int adjB = getAreaElementVertexNameOnTheRightIfExists(area, j, xLength, i);
+              int adjB = getAreaElementVertexNameOnTheRightIfExists(area, i, j, xLength);
               yield new int[]{adjA, adjB};
             }
             case S -> { // is the starting position of the animal; there is a pipe on this
@@ -117,10 +159,10 @@ public class PipeMaze {
             }
           };
 
-          if (isInvalidNumber(adjacents[0])) {
+          if (isValidNumber(adjacents[0])) {
             graph.addEdge(vertex, adjacents[0]);
           }
-          if (isInvalidNumber(adjacents[1])) {
+          if (isValidNumber(adjacents[1])) {
             graph.addEdge(vertex, adjacents[1]);
           }
         }
@@ -141,7 +183,7 @@ public class PipeMaze {
           continue;
         }
         if (getAreaElementPipeType(y, x, area) != DOT && getAreaElementPipeType(y, x, area) != S) {
-          if (isInvalidNumber(adjA)) {
+          if (isValidNumber(adjA)) {
             adjA = getAreaElementVertexName(y, x, area);
           } else {
             adjB = getAreaElementVertexName(y, x, area);
@@ -199,7 +241,7 @@ public class PipeMaze {
     return new Area(area, numberOfVertexes);
   }
 
-  private static boolean isInvalidNumber(int number) {
+  private static boolean isValidNumber(int number) {
     return number != INVALID_NUMBER;
   }
 
@@ -207,11 +249,11 @@ public class PipeMaze {
     return new int[]{INVALID_NUMBER, INVALID_NUMBER};
   }
 
-  private static int getAreaElementVertexNameOnTheRightIfExists(char[][][] area, int j, int xLength, int i) {
+  private static int getAreaElementVertexNameOnTheRightIfExists(char[][][] area, int i, int j, int xLength) {
     return j + 1 < xLength ? getAreaElementVertexNameOnTheRight(area, i, j) : INVALID_NUMBER;
   }
 
-  private static int getAreaElementVertexNameOnTheLeftIfExists(char[][][] area, int j, int i) {
+  private static int getAreaElementVertexNameOnTheLeftIfExists(char[][][] area, int i, int j) {
     return j - 1 >= 0 ? getAreaElementVertexNameOnTheLeft(area, i, j) : INVALID_NUMBER;
   }
 
@@ -275,6 +317,9 @@ public class PipeMaze {
     }
 
     public boolean hasPathTo(int v) {
+      if (v < 0 || v >= marked.length) {
+        return false;
+      }
       return marked[v];
     }
 
