@@ -26,7 +26,7 @@ public class MirageMaintenance {
   public long getSumOfExtrapolatedValuesFromTheLeft() throws IOException {
     long sum = 0;
 
-    InputStream is = SeedFertilizer.class.getResourceAsStream(INPUT_FILE);
+    InputStream is = MirageMaintenance.class.getResourceAsStream(INPUT_FILE);
 
     try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
       String line;

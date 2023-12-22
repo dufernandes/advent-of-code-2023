@@ -60,7 +60,7 @@ public class CamelCards {
 
   public long findTotalWinnings() throws IOException {
     List<HandBid> handBids = new ArrayList<>();
-    InputStream is = SeedFertilizer.class.getResourceAsStream(INPUT_FILE);
+    InputStream is = CamelCards.class.getResourceAsStream(INPUT_FILE);
 
     try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
       String line;

@@ -125,7 +125,7 @@ public class HauntedWasteland {
 
   private static String getInstructionsAndMapAndStaringNodes(Map<String, String[]> map, List<String> startingNodes) throws IOException {
     String instructions;
-    InputStream is = SeedFertilizer.class.getResourceAsStream(INPUT_FILE_B);
+    InputStream is = HauntedWasteland.class.getResourceAsStream(INPUT_FILE_B);
 
     List<String> nodeList = new ArrayList<>();
     try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
@@ -147,7 +147,7 @@ public class HauntedWasteland {
 
   private static String getInstructionsAndMap(Map<String, String[]> map) throws IOException {
     String instructions;
-    InputStream is = SeedFertilizer.class.getResourceAsStream(INPUT_FILE_A);
+    InputStream is = HauntedWasteland.class.getResourceAsStream(INPUT_FILE_A);
 
     try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
       String line = br.readLine();

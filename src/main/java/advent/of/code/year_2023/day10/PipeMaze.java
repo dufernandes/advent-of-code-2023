@@ -1,6 +1,5 @@
 package advent.of.code.year_2023.day10;
 
-import advent.of.code.year_2023.day05.SeedFertilizer;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -244,7 +243,7 @@ public class PipeMaze {
     return new int[]{adjA, adjB};
   }
 
-  private static void print2D(char[][][] mat)
+  private static void print3D(char[][][] mat)
   {
     for (char[][] rows : mat) {
       StringBuilder builder = new StringBuilder();
@@ -261,12 +260,12 @@ public class PipeMaze {
     int ySize, xSize;
     int numberOfVertexes = 0;
 
-    InputStream is = SeedFertilizer.class.getResourceAsStream(INPUT_FILE);
+    InputStream is = PipeMaze.class.getResourceAsStream(INPUT_FILE);
     try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
       ySize = (int) br.lines().count();
     }
 
-    is = SeedFertilizer.class.getResourceAsStream(INPUT_FILE);
+    is = PipeMaze.class.getResourceAsStream(INPUT_FILE);
     try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
       String line;
       int counter = 0;
