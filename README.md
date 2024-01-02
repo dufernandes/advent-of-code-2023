@@ -1,10 +1,10 @@
-# Advent of code
+# Advent of code of 2023
 
 ![Build and tests state](https://github.com/dufernandes/advent-of-code/actions/workflows/maven.yml/badge.svg?branch=main) [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-Here are some Java solutions for the [Advent of code challenges](https://adventofcode.com/). Each challenge can be run using the `public static main(String[] args)` method, or by running `mvn clean verify`, which run all tests. These tests call all methods which solve the problems at hand.
+Here are some Java solutions for the [Advent of code challenges of 2023](https://adventofcode.com/2023). Each challenge can be run using the `public static main(String[] args)` method, or by running `mvn clean verify`, which run all tests. These tests call all methods which solve the problems at hand.
 
-## Challenges for 2023
+## Challenges
 
 - [Day 01 instructions: Trebuchet](https://adventofcode.com/2023/day/1) - challenge at [day 01 folder](src/main/java/advent/of/code/year_2023/day01)
 - [Day 02 instructions: Cube Conundrum](https://adventofcode.com/2023/day/2) - challenge at [day 02 folder](src/main/java/advent/of/code/year_2023/day02)
@@ -33,3 +33,6 @@ Here are some Java solutions for the [Advent of code challenges](https://advento
 ### Day 10 references for part 2
 - [Point in polygon](https://en.wikipedia.org/wiki/Point_in_polygon)
 - [Even–odd rule](https://en.wikipedia.org/wiki/Even%E2%80%93odd_rule)
+
+### Day 11 references for part 1
+- [Shortest distance between two cells in a matrix or grid](https://www.geeksforgeeks.org/shortest-distance-two-cells-matrix-grid/)

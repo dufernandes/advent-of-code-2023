@@ -14,7 +14,7 @@ import java.util.Set;
 public class CosmicExpansion {
 
   private static final String INPUT_FILE = "/year2023/day_11_input.txt";
-  public static final char GALIAXY = '#';
+  public static final char GALAXY = '#';
   public static final char SPACE = '.';
 
   public static void main(String[] args) {
@@ -37,11 +37,36 @@ public class CosmicExpansion {
     print2D(image);
     System.out.println();
 
+    Set<Galaxy> galaxies = createGalaxyListAndAssignGalaxyNamesToImage(image);
+
+    print2D(image);
+
+    return calculateSumOfLengths(galaxies, image);
+  }
+
+  private static int calculateSumOfLengths(Set<Galaxy> galaxies, char[][] image) {
+    Galaxy[] galaxiesArray = galaxies.toArray(new Galaxy[0]);
+    int sumOfLengths = 0;
+    for (int i = 0; i < galaxiesArray.length; i++) {
+      for (int j = i + 1; j < galaxiesArray.length; j++) {
+        Galaxy origin = galaxiesArray[i];
+        Galaxy destiny = galaxiesArray[j];
+        int distance = ImageGraph.minDistance(image, origin.yCoordinate(), origin.xCoordinate(), destiny.yCoordinate(), destiny.xCoordinate());
+        if (distance == -1) {
+          throw new RuntimeException("Problem distance not found. Origin: " + origin + " Destiny: " + destiny);
+        }
+        sumOfLengths += distance;
+      }
+    }
+    return sumOfLengths;
+  }
+
+  private static Set<Galaxy> createGalaxyListAndAssignGalaxyNamesToImage(char[][] image) {
     Set<Galaxy> galaxies = new HashSet<>();
 
     int galaxyName = 1;
     for (int y = 0; y < image.length; y++) {
-      // add to the galaxies list, and update the image map with their name for easily debugging
+      // add to the galaxies list, and update the image map with their name for easy debugging
       for (int x = 0; x < image[y].length; x++) {
         char element = image[y][x];
         if (isGalaxy(element)) {
@@ -50,11 +75,7 @@ public class CosmicExpansion {
         }
       }
     }
-
-    print2D(image);
-
-    int sumOfLengths = 0;
-    return sumOfLengths;
+    return galaxies;
   }
 
   private static char[][] expandRevertedImage(char[][] imageTransition) {
@@ -135,7 +156,7 @@ public class CosmicExpansion {
   }
 
   private static boolean isGalaxy(char element) {
-    return element == GALIAXY;
+    return element == GALAXY;
   }
 
   private static boolean containsNoGalaxies(String line) {

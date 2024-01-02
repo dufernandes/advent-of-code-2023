@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PipeMazeTest {
+class PipeImageGraphTest {
 
   @Test
   void findFarthestPoint_whenExecuted_thenReturn7012() throws IOException {
