@@ -19,27 +19,27 @@ public class CosmicExpansion {
 
   public static void main(String[] args) {
     try {
-      log.info("The result for part one is: {}", new CosmicExpansion().sumOfLengths());
-      //log.info("The result of part two is: {}", new CosmicExpansion().getNumberOfEnclosedTiles());
+      log.info("The result for part one is: {}", new CosmicExpansion().sumOfLengths(2));
+      log.info("The result for part two is: {}", new CosmicExpansion().sumOfLengths(100));
     } catch (IOException ioe) {
       log.error("error while opening input file", ioe);
     }
   }
 
-  private long sumOfLengths() throws IOException {
-    char[][] imageTransition = createImageWithExpandedRows();
-    print2D(imageTransition);
+  private long sumOfLengths(int expansionSize) throws IOException {
+    char[][] imageTransition = createImageWithExpandedRows(expansionSize);
+    //print2D(imageTransition);
     System.out.println();System.out.println();
 
-    char[][] imageTransitionRevertedExpanded = expandRevertedImage(imageTransition);
+    char[][] imageTransitionRevertedExpanded = expandRevertedImage(imageTransition, expansionSize);
 
     char[][] image = reverseArray(imageTransitionRevertedExpanded[0].length, imageTransitionRevertedExpanded.length, imageTransitionRevertedExpanded);
-    print2D(image);
+    //print2D(image);
     System.out.println();
 
     Set<Galaxy> galaxies = createGalaxyListAndAssignGalaxyNamesToImage(image);
 
-    print2D(image);
+    //print2D(image);
 
     return calculateSumOfLengths(galaxies, image);
   }
@@ -78,13 +78,15 @@ public class CosmicExpansion {
     return galaxies;
   }
 
-  private static char[][] expandRevertedImage(char[][] imageTransition) {
+  private static char[][] expandRevertedImage(char[][] imageTransition, int expansionSize) {
     char[][] imageTransitionReverted = reverseArray(imageTransition[0].length, imageTransition.length, imageTransition);
-    print2D(imageTransitionReverted);
+    //print2D(imageTransitionReverted);
+    imageTransition = new char[0][0];
+    System.gc();
     System.out.println();
     System.out.println();
 
-    int yRevertedSize = imageTransitionReverted.length + (int) Arrays.stream(imageTransitionReverted).map(String::valueOf).filter(CosmicExpansion::containsNoGalaxies).count();
+    int yRevertedSize = imageTransitionReverted.length + (int) Arrays.stream(imageTransitionReverted).map(String::valueOf).filter(CosmicExpansion::containsNoGalaxies).count() * (expansionSize - 1);
 
     char[][] imageTransitionRevertedExpanded = new char[yRevertedSize][imageTransitionReverted[0].length];
     int counter = 0;
@@ -94,8 +96,10 @@ public class CosmicExpansion {
 
       String galaxyElementsAsString = String.valueOf(galaxyElements);
       if (containsNoGalaxies(galaxyElementsAsString)) {
-        imageTransitionRevertedExpanded[++counter] = galaxyElementsAsString.toCharArray();
-        counter++;
+        for (int i = counter + 1; i <= counter + (expansionSize - 1); i++) {
+          imageTransitionRevertedExpanded[i] = galaxyElementsAsString.toCharArray();
+        }
+        counter += expansionSize;
         continue;
       }
 
@@ -104,7 +108,7 @@ public class CosmicExpansion {
     return imageTransitionRevertedExpanded;
   }
 
-  private static char[][] createImageWithExpandedRows() throws IOException {
+  private static char[][] createImageWithExpandedRows(int expansionSize) throws IOException {
     char[][] imageTransition = null;
     int ySize, xSize = 0;
 
@@ -115,7 +119,7 @@ public class CosmicExpansion {
 
     is = CosmicExpansion.class.getResourceAsStream(INPUT_FILE);
     try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
-      ySize += (int) br.lines().filter(CosmicExpansion::containsNoGalaxies).count();
+      ySize += (int) br.lines().filter(CosmicExpansion::containsNoGalaxies).count() * (expansionSize - 1);
     }
 
     is = CosmicExpansion.class.getResourceAsStream(INPUT_FILE);
@@ -134,8 +138,10 @@ public class CosmicExpansion {
 
         // add extra line in case there are no galaxies
         if (containsNoGalaxies(line)) {
-          imageTransition[++counter] = line.toCharArray();
-          counter++;
+          for (int i = counter + 1; i <= counter + expansionSize - 1; i++) {
+            imageTransition[i] = line.toCharArray();
+          }
+          counter += expansionSize;
           continue;
         }
 
