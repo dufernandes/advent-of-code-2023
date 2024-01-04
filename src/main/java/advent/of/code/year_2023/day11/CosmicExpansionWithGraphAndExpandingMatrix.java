@@ -26,7 +26,7 @@ public class CosmicExpansionWithGraphAndExpandingMatrix {
     }
   }
 
-  private long sumOfLengths(int expansionSize) throws IOException {
+  public long sumOfLengths(int expansionSize) throws IOException {
     char[][] imageTransition = createImageWithExpandedRows(expansionSize);
 
     char[][] imageTransitionRevertedExpanded = expandRevertedImage(imageTransition, expansionSize);

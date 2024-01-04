@@ -18,13 +18,13 @@ public class CosmicExpansionOptimized {
   public static void main(String[] args) {
     try {
       log.info("The result for part one is: {}", new CosmicExpansionOptimized().sumOfLengths(2));
-      log.info("The result for part two is: {}", new CosmicExpansionOptimized().sumOfLengths(1000000));
+      log.info("The result for part two is: {}", new CosmicExpansionOptimized().sumOfLengths(100));
     } catch (IOException ioe) {
       log.error("error while opening input file", ioe);
     }
   }
 
-  private long sumOfLengths(int expansionSize) throws IOException {
+  public long sumOfLengths(int expansionSize) throws IOException {
     ImageGalaxies imageGalaxies = createImageAndGalaxies();
 
     char[][] image = imageGalaxies.images;
