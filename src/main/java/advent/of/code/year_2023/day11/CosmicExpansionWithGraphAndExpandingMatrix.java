@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Slf4j
-public class CosmicExpansion {
+public class CosmicExpansionWithGraphAndExpandingMatrix {
 
   private static final String INPUT_FILE = "/year2023/day_11_input.txt";
   public static final char GALAXY = '#';
@@ -19,8 +19,8 @@ public class CosmicExpansion {
 
   public static void main(String[] args) {
     try {
-      log.info("The result for part one is: {}", new CosmicExpansion().sumOfLengths(2));
-      log.info("The result for part two is: {}", new CosmicExpansion().sumOfLengths(100));
+      log.info("The result for part one is: {}", new CosmicExpansionWithGraphAndExpandingMatrix().sumOfLengths(2));
+      log.info("The result for part two is: {}", new CosmicExpansionWithGraphAndExpandingMatrix().sumOfLengths(100));
     } catch (IOException ioe) {
       log.error("error while opening input file", ioe);
     }
@@ -28,18 +28,12 @@ public class CosmicExpansion {
 
   private long sumOfLengths(int expansionSize) throws IOException {
     char[][] imageTransition = createImageWithExpandedRows(expansionSize);
-    //print2D(imageTransition);
-    System.out.println();System.out.println();
 
     char[][] imageTransitionRevertedExpanded = expandRevertedImage(imageTransition, expansionSize);
 
     char[][] image = reverseArray(imageTransitionRevertedExpanded[0].length, imageTransitionRevertedExpanded.length, imageTransitionRevertedExpanded);
-    //print2D(image);
-    System.out.println();
 
     Set<Galaxy> galaxies = createGalaxyListAndAssignGalaxyNamesToImage(image);
-
-    //print2D(image);
 
     return calculateSumOfLengths(galaxies, image);
   }
@@ -80,13 +74,8 @@ public class CosmicExpansion {
 
   private static char[][] expandRevertedImage(char[][] imageTransition, int expansionSize) {
     char[][] imageTransitionReverted = reverseArray(imageTransition[0].length, imageTransition.length, imageTransition);
-    //print2D(imageTransitionReverted);
-    imageTransition = new char[0][0];
-    System.gc();
-    System.out.println();
-    System.out.println();
 
-    int yRevertedSize = imageTransitionReverted.length + (int) Arrays.stream(imageTransitionReverted).map(String::valueOf).filter(CosmicExpansion::containsNoGalaxies).count() * (expansionSize - 1);
+    int yRevertedSize = imageTransitionReverted.length + (int) Arrays.stream(imageTransitionReverted).map(String::valueOf).filter(CosmicExpansionWithGraphAndExpandingMatrix::containsNoGalaxies).count() * (expansionSize - 1);
 
     char[][] imageTransitionRevertedExpanded = new char[yRevertedSize][imageTransitionReverted[0].length];
     int counter = 0;
@@ -112,17 +101,17 @@ public class CosmicExpansion {
     char[][] imageTransition = null;
     int ySize, xSize = 0;
 
-    InputStream is = CosmicExpansion.class.getResourceAsStream(INPUT_FILE);
+    InputStream is = CosmicExpansionWithGraphAndExpandingMatrix.class.getResourceAsStream(INPUT_FILE);
     try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
       ySize = (int) br.lines().count();
     }
 
-    is = CosmicExpansion.class.getResourceAsStream(INPUT_FILE);
+    is = CosmicExpansionWithGraphAndExpandingMatrix.class.getResourceAsStream(INPUT_FILE);
     try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
-      ySize += (int) br.lines().filter(CosmicExpansion::containsNoGalaxies).count() * (expansionSize - 1);
+      ySize += (int) br.lines().filter(CosmicExpansionWithGraphAndExpandingMatrix::containsNoGalaxies).count() * (expansionSize - 1);
     }
 
-    is = CosmicExpansion.class.getResourceAsStream(INPUT_FILE);
+    is = CosmicExpansionWithGraphAndExpandingMatrix.class.getResourceAsStream(INPUT_FILE);
     try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
       String line;
       int counter = 0;
@@ -179,6 +168,18 @@ public class CosmicExpansion {
     }
   }
 
-  private record Galaxy(int yCoordinate, int xCoordinate, int name) {
+  private record Galaxy(int yCoordinate, int xCoordinate, int name) implements Comparable<Galaxy> {
+    @Override
+    public int compareTo(Galaxy other) {
+      if (other == null) {
+        return 1;
+      }
+
+      if (other.name == this.name) {
+        return 0;
+      }
+
+      return this.name > other.name ? 1 : -1;
+    }
   }
 }
