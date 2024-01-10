@@ -44,3 +44,8 @@ Here are some Java solutions for the [Advent of code challenges of 2023](https:/
 ### Day 12 references for part 1
 - [What are Permutations & how do they differ from Combinations?](https://www.youtube.com/watch?v=us0cYQXQpxg&t=114s)
 - [Recursion to solve the problem](https://www.reddit.com/r/adventofcode/comments/18gj7kj/comment/kd33avp/?utm_source=share&utm_medium=web2x&context=3)
+- [Print all combinations | Set-2](https://www.geeksforgeeks.org/print-all-possible-combinations-of-r-elements-in-a-given-array-of-size-n/)
+
+### Day 12 references for part 2
+- [Climbing Stairs to reach at the top](https://www.geeksforgeeks.org/count-ways-reach-nth-stair/)
+- [Advent of Code 2023 Day 12: Hot Springs](https://www.youtube.com/watch?v=g3Ms5e7Jdqo)
