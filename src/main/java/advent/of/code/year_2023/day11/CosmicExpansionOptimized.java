@@ -47,7 +47,7 @@ public class CosmicExpansionOptimized {
         Galaxy origin = galaxiesArray[i];
         Galaxy destiny = galaxiesArray[j];
         int distance = Math.abs(origin.xCoordinate - destiny.xCoordinate) + Math.abs(origin.yCoordinate - destiny.yCoordinate);
-        if (distance == -1) {
+        if (distance < 0) {
           throw new RuntimeException("Problem distance not found. Origin: " + origin + " Destiny: " + destiny);
         }
         sumOfLengths += distance;

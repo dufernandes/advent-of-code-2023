@@ -37,3 +37,10 @@ Here are some Java solutions for the [Advent of code challenges of 2023](https:/
 
 ### Day 11 references for part 1
 - [Shortest distance between two cells in a matrix or grid](https://www.geeksforgeeks.org/shortest-distance-two-cells-matrix-grid/)
+
+### Day 11 references for part 1
+- [What is memoization? A Complete tutorial](https://www.geeksforgeeks.org/what-is-memoization-a-complete-tutorial/)
+
+### Day 12 references for part 1
+- [What are Permutations & how do they differ from Combinations?](https://www.youtube.com/watch?v=us0cYQXQpxg&t=114s)
+- [Recursion to solve the problem](https://www.reddit.com/r/adventofcode/comments/18gj7kj/comment/kd33avp/?utm_source=share&utm_medium=web2x&context=3)
