@@ -17,6 +17,7 @@ Here are some Java solutions for the [Advent of code challenges of 2023](https:/
 - [Day 09 instructions: Mirage Maintenance](https://adventofcode.com/2023/day/9) - challenge at [day 09 folder](src/main/java/advent/of/code/year_2023/day09)
 - [Day 10 instructions: Pipe Maze](https://adventofcode.com/2023/day/10) - challenge at [day 10 folder](src/main/java/advent/of/code/year_2023/day10)
 - [Day 11 instructions: Cosmic Expansion](https://adventofcode.com/2023/day/11) - challenge at [day 11 folder](src/main/java/advent/of/code/year_2023/day11)
+- [Day 12 instructions: Hot Springs](https://adventofcode.com/2023/day/12) - challenge at [day 12 folder](src/main/java/advent/of/code/year_2023/day12)
 
 ## References
 
