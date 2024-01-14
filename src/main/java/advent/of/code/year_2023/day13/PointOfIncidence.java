@@ -19,7 +19,7 @@ public class PointOfIncidence {
   public static void main(String[] args) {
     try {
       log.info("The result for part one is: {}", new PointOfIncidence().getSummary());
-      //log.info("The result for part two is: {}", new PointOfIncidence().getSummary());
+      log.info("The result for part two is: {}", new PointOfIncidence().getSummaryWithSmudge());
     } catch (IOException ioe) {
       log.error("error while opening input file", ioe);
     }
@@ -41,25 +41,90 @@ public class PointOfIncidence {
           notesArray = notes.toArray(new char[0][0]);
           notes.clear();
 
-          sum = sumForMirrorRow(notesArray, sum);
+          sum += sumForMirrorRow(notesArray) + sumForMirrorColumn(notesArray);
         }
       }
     }
 
     // process last note
     notesArray = notes.toArray(new char[0][0]);
-    sum = sumForMirrorRow(notesArray, sum);
+    sum += sumForMirrorRow(notesArray) + sumForMirrorColumn(notesArray);
 
 
     return sum;
   }
 
-  private static long sumForMirrorRow(char[][] notesArray, long sum) {
+  private long getSummaryWithSmudge() throws IOException {
+
+    List<char[]> notes = new ArrayList<>();
+
+    long sum = 0;
+    char[][] notesArray = null;
+    InputStream is = CosmicExpansionOptimized.class.getResourceAsStream(INPUT_FILE);
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+      String line;
+      while ((line = br.readLine()) != null) {
+        if (StringUtils.isNotEmpty(line)) {
+          notes.add(line.toCharArray());
+        } else {
+          notesArray = notes.toArray(new char[0][0]);
+          notes.clear();
+
+          sum += sumForMirrorRow(notesArray) + sumForMirrorColumn(notesArray);
+        }
+      }
+    }
+
+    // process last note
+    notesArray = notes.toArray(new char[0][0]);
+    sum += sumForMirrorRow(notesArray) + sumForMirrorColumn(notesArray);
+
+
+    return sum;
+  }
+
+  private static long sumForMirrorRow(char[][] notesArray) {
     int mirrorRow = getMirrorRow(notesArray);
     if (isNumberValid(mirrorRow)) {
-      sum += (mirrorRow + 1) * 100L;
+      return (mirrorRow + 1) * 100L;
     }
-    return sum;
+    return 0;
+  }
+
+  private static long sumForMirrorColumn(char[][] notesArray) {
+    int mirrorColumn = getMirrorColumn(notesArray);
+    if (isNumberValid(mirrorColumn)) {
+      return mirrorColumn + 1;
+    }
+    return 0;
+  }
+
+  private static int getMirrorColumn(char[][] notesArray) {
+    int mirrorColumn = getInvalidNumber();
+    for (int x = 0; x < notesArray[0].length; x++) {
+      if (x + 1 < notesArray[0].length) {
+
+        if (areArraysEqual(getColumn(notesArray, x), getColumn(notesArray, x + 1))) {
+          int leftColumn = x - 1;
+          int rightColumn = x + 2;
+
+          boolean mirrorFound = true;
+          while (leftColumn >= 0 && rightColumn < notesArray[0].length && mirrorFound) {
+            if (!areArraysEqual(getColumn(notesArray, leftColumn), getColumn(notesArray, rightColumn))) {
+              mirrorFound = false;
+            }
+            leftColumn--;
+            rightColumn++;
+          }
+          if (mirrorFound) {
+            mirrorColumn = x;
+            break;
+          }
+        }
+      }
+    }
+
+    return mirrorColumn;
   }
 
   private static int getMirrorRow(char[][] notesArray) {
@@ -67,13 +132,13 @@ public class PointOfIncidence {
     for (int y = 0; y < notesArray.length; y++) {
       if (y + 1 < notesArray.length) {
 
-        if (areRowsEqual(notesArray[y], notesArray[y + 1])) {
+        if (areArraysEqual(notesArray[y], notesArray[y + 1])) {
           int topRow = y - 1;
           int bottomRow = y + 2;
 
           boolean mirrorFound = true;
           while (topRow >= 0 && bottomRow < notesArray.length && mirrorFound) {
-            if (!areRowsEqual(notesArray[topRow], notesArray[bottomRow])) {
+            if (!areArraysEqual(notesArray[topRow], notesArray[bottomRow])) {
               mirrorFound = false;
             }
             topRow--;
@@ -98,7 +163,15 @@ public class PointOfIncidence {
     return Integer.MIN_VALUE;
   }
 
-  private static boolean areRowsEqual(char[] rowA, char[] rowB) {
+  private static char[] getColumn(char[][] from, int columnIndex) {
+    char[] column = new char[from.length];
+    for (int y = 0; y < column.length; y++) {
+      column[y] = from[y][columnIndex];
+    }
+    return column;
+  }
+
+  private static boolean areArraysEqual(char[] rowA, char[] rowB) {
     for (int i = 0; i < rowA.length; i++) {
       if (rowA[i] != rowB[i]) {
         return false;
