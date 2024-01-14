@@ -18,6 +18,7 @@ Here are some Java solutions for the [Advent of code challenges of 2023](https:/
 - [Day 10 instructions: Pipe Maze](https://adventofcode.com/2023/day/10) - challenge at [day 10 folder](src/main/java/advent/of/code/year_2023/day10)
 - [Day 11 instructions: Cosmic Expansion](https://adventofcode.com/2023/day/11) - challenge at [day 11 folder](src/main/java/advent/of/code/year_2023/day11)
 - [Day 12 instructions: Hot Springs](https://adventofcode.com/2023/day/12) - challenge at [day 12 folder](src/main/java/advent/of/code/year_2023/day12)
+- [Day 13 instructions: Point of Incidence](https://adventofcode.com/2023/day/13) - challenge at [day 13 folder](src/main/java/advent/of/code/year_2023/day13)
 
 ## References
 
@@ -50,3 +51,6 @@ Here are some Java solutions for the [Advent of code challenges of 2023](https:/
 ### Day 12 references for part 2
 - [Climbing Stairs to reach at the top](https://www.geeksforgeeks.org/count-ways-reach-nth-stair/)
 - [Advent of Code 2023 Day 12: Hot Springs](https://www.youtube.com/watch?v=g3Ms5e7Jdqo)
+
+### Day 13 references for part 2
+- [2023 Day 13 - Easy additional examples](https://old.reddit.com/r/adventofcode/comments/18hitog/2023_day_13_easy_additional_examples/kd9nil6/)

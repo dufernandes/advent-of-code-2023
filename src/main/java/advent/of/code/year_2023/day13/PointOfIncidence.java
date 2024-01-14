@@ -25,7 +25,7 @@ public class PointOfIncidence {
     }
   }
 
-  private long getSummary() throws IOException {
+  long getSummary() throws IOException {
 
     List<char[]> notes = new ArrayList<>();
 
@@ -54,7 +54,7 @@ public class PointOfIncidence {
     return sum;
   }
 
-  private long getSummaryWithSmudge() throws IOException {
+  long getSummaryWithSmudge() throws IOException {
 
     List<char[]> notes = new ArrayList<>();
 
@@ -69,22 +69,56 @@ public class PointOfIncidence {
         } else {
           notesArray = notes.toArray(new char[0][0]);
           notes.clear();
-
-          sum += sumForMirrorRow(notesArray) + sumForMirrorColumn(notesArray);
+          sum += calculateSumConsideringSludge(notesArray);
         }
       }
     }
 
     // process last note
     notesArray = notes.toArray(new char[0][0]);
-    sum += sumForMirrorRow(notesArray) + sumForMirrorColumn(notesArray);
+    sum += calculateSumConsideringSludge(notesArray);
 
 
     return sum;
+  }
+
+  private static long calculateSumConsideringSludge(char[][] notesArray) {
+    long sumCandidate = 0;
+
+    int columnMirrorToBeIgnored = (int) sumForMirrorColumn(notesArray) - 1;
+    int rowMirrorToBeIgnored = (int) (sumForMirrorRow(notesArray) / 100) - 1;
+
+    sumCandidateFound:
+    for (int y = 0; y < notesArray.length; y++) {
+      for (int x = 0; x < notesArray[y].length; x++) {
+        switchValue(notesArray, y, x);
+        long candidate = sumForMirrorRow(notesArray, rowMirrorToBeIgnored) + sumForMirrorColumn(notesArray, columnMirrorToBeIgnored);
+        if (candidate > 0) {
+          sumCandidate = candidate;
+          break sumCandidateFound;
+        }
+
+        switchValue(notesArray, y, x);
+      }
+    }
+
+    return sumCandidate;
+  }
+
+  private static void switchValue(char[][] notesArray, int y, int x) {
+    if (notesArray[y][x] == '#') {
+      notesArray[y][x] = '.';
+    } else {
+      notesArray[y][x] = '#';
+    }
   }
 
   private static long sumForMirrorRow(char[][] notesArray) {
-    int mirrorRow = getMirrorRow(notesArray);
+    return sumForMirrorRow(notesArray, getInvalidNumber());
+  }
+
+  private static long sumForMirrorRow(char[][] notesArray, int mirrorToBeIgnored) {
+    int mirrorRow = getMirrorRow(notesArray, mirrorToBeIgnored);
     if (isNumberValid(mirrorRow)) {
       return (mirrorRow + 1) * 100L;
     }
@@ -92,17 +126,25 @@ public class PointOfIncidence {
   }
 
   private static long sumForMirrorColumn(char[][] notesArray) {
-    int mirrorColumn = getMirrorColumn(notesArray);
+    return sumForMirrorColumn(notesArray, getInvalidNumber());
+  }
+
+  private static long sumForMirrorColumn(char[][] notesArray, int mirrorToBeIgnored) {
+    int mirrorColumn = getMirrorColumn(notesArray, mirrorToBeIgnored);
     if (isNumberValid(mirrorColumn)) {
       return mirrorColumn + 1;
     }
     return 0;
   }
 
-  private static int getMirrorColumn(char[][] notesArray) {
+  private static int getMirrorColumn(char[][] notesArray, int mirrorToBeIgnored) {
     int mirrorColumn = getInvalidNumber();
     for (int x = 0; x < notesArray[0].length; x++) {
       if (x + 1 < notesArray[0].length) {
+
+        if (isNumberValid(mirrorToBeIgnored) && mirrorToBeIgnored == x) {
+          continue;
+        }
 
         if (areArraysEqual(getColumn(notesArray, x), getColumn(notesArray, x + 1))) {
           int leftColumn = x - 1;
@@ -127,10 +169,18 @@ public class PointOfIncidence {
     return mirrorColumn;
   }
 
-  private static int getMirrorRow(char[][] notesArray) {
+  private static int getMirrorColumn(char[][] notesArray) {
+    return getMirrorColumn(notesArray, getInvalidNumber());
+  }
+
+  private static int getMirrorRow(char[][] notesArray, int mirrorToBeIgnored) {
     int mirrorRow = getInvalidNumber();
     for (int y = 0; y < notesArray.length; y++) {
       if (y + 1 < notesArray.length) {
+
+        if (isNumberValid(mirrorToBeIgnored) && y == mirrorToBeIgnored) {
+          continue;
+        }
 
         if (areArraysEqual(notesArray[y], notesArray[y + 1])) {
           int topRow = y - 1;
@@ -153,6 +203,10 @@ public class PointOfIncidence {
     }
 
     return mirrorRow;
+  }
+
+  private static int getMirrorRow(char[][] notesArray) {
+    return getMirrorRow(notesArray, getInvalidNumber());
   }
 
   private static boolean isNumberValid(int mirrorRow) {
