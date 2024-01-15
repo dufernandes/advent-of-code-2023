@@ -55,36 +55,15 @@ public class ParabolicReflectorDish {
     int counter = 0;
     char[][] oldPuzzle = null;
     while (counter < numberOfCycles) {
-      if (cache.containsKey(new CacheKey(Direction.North, puzzle))) {
-        puzzle = cache.get(new CacheKey(Direction.North, puzzle));
+      if (cache.containsKey(new CacheKey(puzzle))) {
+        puzzle = cache.get(new CacheKey(puzzle));
       } else {
         oldPuzzle = clone(puzzle);
         tiltNorth(puzzle);
-        cache.put(new CacheKey(Direction.North, oldPuzzle), puzzle);
-      }
-
-      if (cache.containsKey(new CacheKey(Direction.West, puzzle))) {
-        puzzle = cache.get(new CacheKey(Direction.West, puzzle));
-      } else {
-        oldPuzzle = clone(puzzle);
         tiltWest(puzzle);
-        cache.put(new CacheKey(Direction.West, oldPuzzle), puzzle);
-      }
-
-      if (cache.containsKey(new CacheKey(Direction.South, puzzle))) {
-        puzzle = cache.get(new CacheKey(Direction.South, puzzle));
-      } else {
-        oldPuzzle = clone(puzzle);
         tiltSouth(puzzle);
-        cache.put(new CacheKey(Direction.South, oldPuzzle), puzzle);
-      }
-
-      if (cache.containsKey(new CacheKey(Direction.East, puzzle))) {
-        puzzle = cache.get(new CacheKey(Direction.East, puzzle));
-      } else {
-        oldPuzzle = clone(puzzle);
         tiltEast(puzzle);
-        cache.put(new CacheKey(Direction.East, oldPuzzle), puzzle);
+        cache.put(new CacheKey(oldPuzzle), puzzle);
       }
       System.out.println(counter);
       counter++;
@@ -250,20 +229,18 @@ public class ParabolicReflectorDish {
     East
   }
 
-  public record CacheKey(Direction direction, char[][] puzzle) {
+  public record CacheKey(char[][] puzzle) {
     @Override
     public boolean equals(Object o) {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
       CacheKey cacheKey = (CacheKey) o;
-      return direction == cacheKey.direction && Arrays.deepEquals(puzzle, cacheKey.puzzle);
+      return Arrays.deepEquals(puzzle, cacheKey.puzzle);
     }
 
     @Override
     public int hashCode() {
-      int result = Objects.hash(direction);
-      result = 31 * result + Arrays.deepHashCode(puzzle);
-      return result;
+      return 31 + Arrays.deepHashCode(puzzle);
     }
   }
 }
