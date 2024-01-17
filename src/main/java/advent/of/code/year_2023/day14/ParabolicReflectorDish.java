@@ -19,7 +19,7 @@ public class ParabolicReflectorDish {
 
   public static void main(String[] args) {
     try {
-      //log.info("The result for part one is: {}", new ParabolicReflectorDish().getTotalLoadOfNorthSupportBeams());
+      log.info("The result for part one is: {}", new ParabolicReflectorDish().getTotalLoadOfNorthSupportBeams());
       log.info("The result for part two is: {}", new ParabolicReflectorDish().getTotalLoadAfterCycles(1000000000));
     } catch (IOException ioe) {
       log.error("error while opening input file", ioe);
@@ -30,18 +30,8 @@ public class ParabolicReflectorDish {
     long sum = 0;
 
     char[][] puzzle = readPuzzle();
-
     tiltNorth(puzzle);
-
-    for (int y = 0; y < puzzle.length; y++) {
-      int rowSum = 0;
-      for (int x = 0; x < puzzle[0].length; x++) {
-        if (puzzle[y][x] == ROUNDED_ROCK) {
-          rowSum++;
-        }
-      }
-      sum += (long) rowSum * (puzzle.length - y);
-    }
+    sum = calculateLoad(puzzle);
 
     return sum;
   }
@@ -52,25 +42,80 @@ public class ParabolicReflectorDish {
     Map<CacheKey, char[][]> cache = new HashMap<>();
     char[][] puzzle = readPuzzle();
 
-    int counter = 0;
-    char[][] oldPuzzle = null;
-    while (counter < numberOfCycles) {
-      if (cache.containsKey(new CacheKey(puzzle))) {
-        puzzle = cache.get(new CacheKey(puzzle));
+    /*
+      Spin the puzzle and cache each result.When a cash is hit, use it.
+      One could ue the cache indefinitely, which would solve the problem
+      for the statement in the problem at part 2. However, for the input given
+      it would take forever to run. Instead, take advantage that there is
+      a cycle within the cache and find th final puzzle.
+     */
+    int spins = 0;
+    while (spins < numberOfCycles) {
+      CacheKey key = new CacheKey(clone(puzzle));
+      if (cache.containsKey(key)) {
+        puzzle = cache.get(key);
+        break;
       } else {
-        oldPuzzle = clone(puzzle);
         tiltNorth(puzzle);
         tiltWest(puzzle);
         tiltSouth(puzzle);
         tiltEast(puzzle);
-        cache.put(new CacheKey(oldPuzzle), puzzle);
+        cache.put(key, clone(puzzle));
       }
-      System.out.println(counter);
+      spins++;
+    }
+
+    char[][] initialPuzzle = clone(puzzle);
+    int cycleSize = calculateCycleSize(puzzle, cache, initialPuzzle);
+
+    /*
+    After detecting the cyclic dependence and its size, one may calculate
+    how many steps are necessary to find the puzzle using the following approach.
+
+    Suppose:
+      - total spins to execute: 10
+      - cyclic cycle has 3 elements
+      - after 2 spins the cycle is found
+      Therefore:
+      1. the cycle starts at 2, meaning there are 8 spins to run
+      2. running through the cache 3 times, the second element of
+      it will be the answer. Think about it: the cycle is found at
+      the 2nd spin, meaning there are 8 spins left. For that, 3 times
+      running the cycle, one finds the answer at the 2nd element of the
+      cycle.
+      Therefore the formula is: (spins to execute - (spinx - cycle size)) mod cycle size
+
+     */
+    int counter = 1;
+    puzzle = clone(initialPuzzle);
+    while (counter < (numberOfCycles - spins - cycleSize) % cycleSize) {
+      puzzle = cache.get(new CacheKey(puzzle));
       counter++;
     }
 
-    print2D(puzzle);
+    return calculateLoad(puzzle);
+  }
 
+  /*
+  Give the initial puzzle, find the size of the circular dependency.
+  For that, simply search through the cache until the initial puzzle
+  is found again.
+   */
+  private static int calculateCycleSize(char[][] puzzle, Map<CacheKey, char[][]> cache, char[][] initialPuzzle) {
+    int cycleSize = 0;
+    boolean initialPuzzleFound = false;
+    while (!initialPuzzleFound) {
+      cycleSize++;
+      puzzle = cache.get(new CacheKey(puzzle));
+      if (Arrays.deepEquals(initialPuzzle, puzzle)) {
+        initialPuzzleFound = true;
+      }
+    }
+    return cycleSize;
+  }
+
+  private static long calculateLoad(char[][] puzzle) {
+    long sum = 0;
     for (int y = 0; y < puzzle.length; y++) {
       int rowSum = 0;
       for (int x = 0; x < puzzle[0].length; x++) {
@@ -80,7 +125,6 @@ public class ParabolicReflectorDish {
       }
       sum += (long) rowSum * (puzzle.length - y);
     }
-
     return sum;
   }
 
@@ -222,25 +266,25 @@ public class ParabolicReflectorDish {
     System.out.println();
   }
 
-  private enum Direction {
-    North,
-    West,
-    South,
-    East
-  }
-
   public record CacheKey(char[][] puzzle) {
     @Override
     public boolean equals(Object o) {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
       CacheKey cacheKey = (CacheKey) o;
-      return Arrays.deepEquals(puzzle, cacheKey.puzzle);
+      return Arrays.deepEquals(this.puzzle, cacheKey.puzzle);
     }
 
     @Override
     public int hashCode() {
       return 31 + Arrays.deepHashCode(puzzle);
+    }
+
+    @Override
+    public String toString() {
+      return "CacheKey{" +
+              "puzzle=" + Arrays.deepToString(puzzle) +
+              '}';
     }
   }
 }
