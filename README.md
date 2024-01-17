@@ -57,5 +57,5 @@ Here are some Java solutions for the [Advent of code challenges of 2023](https:/
 - [2023 Day 13 - Easy additional examples](https://old.reddit.com/r/adventofcode/comments/18hitog/2023_day_13_easy_additional_examples/kd9nil6/)
 
 ### Day 14 part 2
-- [[2023 Day 14 (Part 2)] Need help](https://www.reddit.com/r/adventofcode/comments/18i432k/2023_day_14_part_2_need_help/)
-- [2023 Day 14 (Part 2)] Question about loops](https://www.reddit.com/r/adventofcode/comments/18i9nwj/2023_day_14_part_2_question_about_loops/)
+- [2023 Day 14 - Part 2 - Need help](https://www.reddit.com/r/adventofcode/comments/18i432k/2023_day_14_part_2_need_help/)
+- [2023 Day 14 - Part 2 - Question about loops](https://www.reddit.com/r/adventofcode/comments/18i9nwj/2023_day_14_part_2_question_about_loops/)
