@@ -36,7 +36,7 @@ public class HotSprings {
   public long sumAllArrangementsUnfoldingRecords(int multiplier) throws IOException {
 
     long sum = 0;
-    InputStream is = CosmicExpansionOptimized.class.getResourceAsStream(INPUT_FILE);
+    InputStream is = this.getClass().getResourceAsStream(INPUT_FILE);
     try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
       String line;
       while ((line = br.readLine()) != null) {
@@ -145,8 +145,8 @@ public class HotSprings {
      */
     if (currentElement == DAMAGED || currentElement == UNKNOWN_SPRING) {
       if (springInfos[0] <= springs.length() &&
-          containsNoOperational(springs.substring(0, springInfos[0])) &&
-          (springs.length() == springInfos[0] || springs.charAt(springInfos[0]) != DAMAGED)) {
+              containsNoOperational(springs.substring(0, springInfos[0])) &&
+              (springs.length() == springInfos[0] || springs.charAt(springInfos[0]) != DAMAGED)) {
 
         int[] sInfos = new int[springInfos.length - 1];
         System.arraycopy(springInfos, 1, sInfos, 0, springInfos.length - 1);

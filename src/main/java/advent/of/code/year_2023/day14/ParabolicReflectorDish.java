@@ -1,6 +1,5 @@
 package advent.of.code.year_2023.day14;
 
-import advent.of.code.year_2023.day11.CosmicExpansionOptimized;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -245,7 +244,7 @@ public class ParabolicReflectorDish {
   private static char[][] readPuzzle() throws IOException {
     List<char[]> puzzleList = new ArrayList<>();
 
-    InputStream is = CosmicExpansionOptimized.class.getResourceAsStream(INPUT_FILE);
+    InputStream is = ParabolicReflectorDish.class.getResourceAsStream(INPUT_FILE);
     try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
       String line;
       while ((line = br.readLine()) != null) {

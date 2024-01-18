@@ -31,7 +31,7 @@ public class PointOfIncidence {
 
     long sum = 0;
     char[][] notesArray = null;
-    InputStream is = CosmicExpansionOptimized.class.getResourceAsStream(INPUT_FILE);
+    InputStream is = this.getClass().getResourceAsStream(INPUT_FILE);
     try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
       String line;
       while ((line = br.readLine()) != null) {
