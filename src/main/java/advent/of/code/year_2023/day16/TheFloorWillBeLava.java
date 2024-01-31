@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Slf4j
-public class TheDayWillBeLava {
+public class TheFloorWillBeLava {
 
   private static final String INPUT_FILE = "/year2023/day_16_input.txt";
 
@@ -19,8 +19,8 @@ public class TheDayWillBeLava {
 
   public static void main(String[] args) {
     try {
-      log.info("The result for part one is: {}", new TheDayWillBeLava().sumEnergizedBeams());
-      log.info("The result for part two is: {}", new TheDayWillBeLava().sumEnergizedBeamsOfBestScenario());
+      log.info("The result for part one is: {}", new TheFloorWillBeLava().sumEnergizedBeams());
+      log.info("The result for part two is: {}", new TheFloorWillBeLava().sumEnergizedBeamsOfBestScenario());
     } catch (IOException ioe) {
       log.error("error while opening input file", ioe);
     }
