@@ -21,6 +21,7 @@ Here are some Java solutions for the [Advent of code challenges of 2023](https:/
 - [Day 13 instructions: Point of Incidence](https://adventofcode.com/2023/day/13) - challenge at [day 13 folder](src/main/java/advent/of/code/year_2023/day13)
 - [Day 14 instructions: Parabolic Reflector Dish](https://adventofcode.com/2023/day/14) - challenge at [day 14 folder](src/main/java/advent/of/code/year_2023/day14)
 - [Day 15 instructions: Lens Library](https://adventofcode.com/2023/day/15) - challenge at [day 15 folder](src/main/java/advent/of/code/year_2023/day15)
+- [Day 16 instructions: The Floor Will Be Lava](https://adventofcode.com/2023/day/16) - challenge at [day 16 folder](src/main/java/advent/of/code/year_2023/day16)
 
 ## References
 

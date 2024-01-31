@@ -1,5 +1,6 @@
 package advent.of.code.year_2023.day16;
 
+import advent.of.code.year_2023.util.Tuple;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -8,8 +9,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Set;
-
-import advent.of.code.year_2023.util.Tuple;
 
 @Slf4j
 public class TheDayWillBeLava {
@@ -21,21 +20,69 @@ public class TheDayWillBeLava {
   public static void main(String[] args) {
     try {
       log.info("The result for part one is: {}", new TheDayWillBeLava().sumEnergizedBeams());
-      //log.info("The result for part two is: {}", new LensLibrary().getSumOfFocusingPower());
+      log.info("The result for part two is: {}", new TheDayWillBeLava().sumEnergizedBeamsOfBestScenario());
     } catch (IOException ioe) {
       log.error("error while opening input file", ioe);
     }
   }
 
-  long sumEnergizedBeams() throws IOException {
+  long sumEnergizedBeamsOfBestScenario() throws IOException {
     long sum = 0;
     char[][][] contraption = populateContraption();
 
-    start(contraption, 0, 0);
-    goRight(contraption, 0, 0);
+    for (int y = 0; y < contraption.length; y++) {
+      cleanCache();
+      visitAndMoveRight(contraption, y, 0);
+      long currentSum = sumBeams(contraption);
+      cleanContraption(contraption);
+      if (currentSum > sum) {
+        sum = currentSum;
+      }
+    }
 
-    print3D(contraption);
+    for (int y = 0; y < contraption.length; y++) {
+      cleanCache();
+      visitAndMoveLeft(contraption, y, contraption[y].length - 1);
+      long currentSum = sumBeams(contraption);
+      cleanContraption(contraption);
+      if (currentSum > sum) {
+        sum = currentSum;
+      }
+    }
 
+    for (int x = 0; x < contraption[0].length; x++) {
+      cleanCache();
+      visitAndMoveDown(contraption, 0, x);
+      long currentSum = sumBeams(contraption);
+      cleanContraption(contraption);
+      if (currentSum > sum) {
+        sum = currentSum;
+      }
+    }
+
+    for (int x = 0; x < contraption[0].length; x++) {
+      cleanCache();
+      visitAndMoveUp(contraption, contraption.length - 1, x);
+      long currentSum = sumBeams(contraption);
+      cleanContraption(contraption);
+      if (currentSum > sum) {
+        sum = currentSum;
+      }
+    }
+
+    return sum;
+  }
+
+  long sumEnergizedBeams() throws IOException {
+    char[][][] contraption = populateContraption();
+
+    visitAndMoveRight(contraption, 0, 0);
+
+    return sumBeams(contraption);
+  }
+
+  private static long sumBeams(char[][][] contraption) {
+    long sum = 0;
     for (int y = 0; y < contraption.length; y++) {
       for (int x = 0; x < contraption[y].length; x++) {
         if (contraption[y][x][1] == '#') {
@@ -43,22 +90,13 @@ public class TheDayWillBeLava {
         }
       }
     }
-
     return sum;
   }
 
-  void start(char[][][] contraption, int y, int x) {
-    cacheLocationAndDirection(y, x, Direction.Right);
-
-    char value = markVisited(contraption[y], x);
-    switch (value) {
-      case '.' -> goRight(contraption, y, x);
-      case '/' -> goUp(contraption, y, x);
-      case '\\' -> goDown(contraption, y, x);
-      case '-' -> goRight(contraption, y, x);
-      case '|' -> {
-        goUp(contraption, y, x);
-        goDown(contraption, y, x);
+  private static void cleanContraption(char[][][] contraption) {
+    for (int y = 0; y < contraption.length; y++) {
+      for (int x = 0; x < contraption[y].length; x++) {
+        contraption[y][x][1] = ' ';
       }
     }
   }
@@ -71,6 +109,10 @@ public class TheDayWillBeLava {
     cacheLocationAndDirection(y, x, Direction.Right);
 
     x++;
+    visitAndMoveRight(contraption, y, x);
+  }
+
+  private void visitAndMoveRight(char[][][] contraption, int y, int x) {
     char value = markVisited(contraption[y], x);
     switch (value) {
       case '.' -> goRight(contraption, y, x);
@@ -92,6 +134,10 @@ public class TheDayWillBeLava {
     cacheLocationAndDirection(y, x, Direction.Down);
 
     y++;
+    visitAndMoveDown(contraption, y, x);
+  }
+
+  private void visitAndMoveDown(char[][][] contraption, int y, int x) {
     char value = markVisited(contraption[y], x);
     switch (value) {
       case '.' -> goDown(contraption, y, x);
@@ -113,6 +159,10 @@ public class TheDayWillBeLava {
     cacheLocationAndDirection(y, x, Direction.Left);
 
     x--;
+    visitAndMoveLeft(contraption, y, x);
+  }
+
+  private void visitAndMoveLeft(char[][][] contraption, int y, int x) {
     char value = markVisited(contraption[y], x);
     switch (value) {
       case '.' -> goLeft(contraption, y, x);
@@ -134,6 +184,10 @@ public class TheDayWillBeLava {
     cacheLocationAndDirection(y, x, Direction.Up);
 
     y--;
+    visitAndMoveUp(contraption, y, x);
+  }
+
+  private void visitAndMoveUp(char[][][] contraption, int y, int x) {
     char value = markVisited(contraption[y], x);
     switch (value) {
       case '.' -> goUp(contraption, y, x);
@@ -153,6 +207,10 @@ public class TheDayWillBeLava {
 
   private boolean isCached(int y, int x, Direction direction) {
     return cache.contains(new Tuple<>(y, x, direction));
+  }
+
+  private void cleanCache() {
+    cache.clear();
   }
 
   private static char markVisited(char[][] contraption, int x) {
@@ -187,19 +245,6 @@ public class TheDayWillBeLava {
     }
 
     return contraption;
-  }
-
-  private static void print3D(char[][][] mat)
-  {
-    for (char[][] rows : mat) {
-      StringBuilder builder = new StringBuilder();
-      for (char[] innerRow : rows) {
-
-        builder.append("(").append(innerRow[0]).append(" ").append(innerRow[1]).append(")");
-      }
-      System.out.println(builder);
-    }
-    System.out.println("############################");
   }
 
   private enum Direction {
