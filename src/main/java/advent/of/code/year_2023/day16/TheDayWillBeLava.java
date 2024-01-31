@@ -31,7 +31,7 @@ public class TheDayWillBeLava {
     long sum = 0;
     char[][][] contraption = populateContraption();
 
-    markVisited(contraption[0], 0);
+    start(contraption, 0, 0);
     goRight(contraption, 0, 0);
 
     print3D(contraption);
@@ -45,6 +45,22 @@ public class TheDayWillBeLava {
     }
 
     return sum;
+  }
+
+  void start(char[][][] contraption, int y, int x) {
+    cacheLocationAndDirection(y, x, Direction.Right);
+
+    char value = markVisited(contraption[y], x);
+    switch (value) {
+      case '.' -> goRight(contraption, y, x);
+      case '/' -> goUp(contraption, y, x);
+      case '\\' -> goDown(contraption, y, x);
+      case '-' -> goRight(contraption, y, x);
+      case '|' -> {
+        goUp(contraption, y, x);
+        goDown(contraption, y, x);
+      }
+    }
   }
 
   void goRight(char[][][] contraption, int y, int x) {
@@ -66,8 +82,6 @@ public class TheDayWillBeLava {
         goDown(contraption, y, x);
       }
     }
-
-
   }
 
   private void goDown(char[][][] contraption, int y, int x) {
