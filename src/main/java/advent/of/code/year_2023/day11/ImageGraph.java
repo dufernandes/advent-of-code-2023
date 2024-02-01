@@ -36,7 +36,7 @@ public class ImageGraph {
             = new boolean[grid.length][grid[0].length];
     visited[source.row][source.col] = true;
 
-    while (queue.isEmpty() == false) {
+    while (!queue.isEmpty()) {
       QItem p = queue.remove();
 
       // Destination found;
@@ -83,7 +83,7 @@ public class ImageGraph {
   {
     if (x >= 0 && y >= 0 && x < grid.length
             && y < grid[0].length
-            && visited[x][y] == false) {
+            && !visited[x][y]) {
       return true;
     }
     return false;
