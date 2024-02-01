@@ -81,12 +81,9 @@ public class ImageGraph {
                                  char[][] grid,
                                  boolean[][] visited)
   {
-    if (x >= 0 && y >= 0 && x < grid.length
+    return x >= 0 && y >= 0 && x < grid.length
             && y < grid[0].length
-            && !visited[x][y]) {
-      return true;
-    }
-    return false;
+            && !visited[x][y];
   }
 
   // Driver code
