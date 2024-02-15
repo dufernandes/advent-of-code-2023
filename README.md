@@ -61,3 +61,8 @@ Here are some Java solutions for the [Advent of code challenges of 2023](https:/
 ### Day 14 part 2
 - [2023 Day 14 - Part 2 - Need help](https://www.reddit.com/r/adventofcode/comments/18i432k/2023_day_14_part_2_need_help/)
 - [2023 Day 14 - Part 2 - Question about loops](https://www.reddit.com/r/adventofcode/comments/18i9nwj/2023_day_14_part_2_question_about_loops/)
+
+### Day 17
+- [Advent of Code 2023 Day 17: Clumsy Crucible](https://www.youtube.com/watch?v=2pDSooPLLkI)
+- [Graph Data Structure 4. Dijkstra’s Shortest Path Algorithm ](https://www.youtube.com/watch?v=pVfj6mxhdMw)
+- [Dijkstra's Algorithm - Computerphile](https://www.youtube.com/watch?v=GazC3A4OQTE)
