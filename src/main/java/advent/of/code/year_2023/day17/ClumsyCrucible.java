@@ -40,14 +40,7 @@ public class ClumsyCrucible {
 
   private static long calculatePathWithTheLeastHeatLossPart2(int[][] map, long minPath) {
     Set<Visited> visited = new HashSet<>();
-    PriorityQueue<State> states = new PriorityQueue<>((o1, o2) -> {
-
-      if (o1.heatLoss == o2.heatLoss) {
-        return 0;
-      }
-
-      return o1.heatLoss < o2.heatLoss ? -1 : 1;
-    });
+    PriorityQueue<State> states = new PriorityQueue<>(createHeatLossComparator());
 
     states.add(new State(0, 0, 0, 0, 0, 0));
 
@@ -95,14 +88,7 @@ public class ClumsyCrucible {
 
   private static long calculatePathWithTheLeastHeatLoss(int[][] map, long minPath) {
     Set<Visited> visited = new HashSet<>();
-    PriorityQueue<State> states = new PriorityQueue<>((o1, o2) -> {
-
-      if (o1.heatLoss == o2.heatLoss) {
-        return 0;
-      }
-
-      return o1.heatLoss < o2.heatLoss ? -1 : 1;
-    });
+    PriorityQueue<State> states = new PriorityQueue<>(createHeatLossComparator());
 
     states.add(new State(0, 0, 0, 0, 0, 0));
 
@@ -144,6 +130,17 @@ public class ClumsyCrucible {
     }
 
     return minPath;
+  }
+
+  private static Comparator<State> createHeatLossComparator() {
+    return (o1, o2) -> {
+
+      if (o1.heatLoss == o2.heatLoss) {
+        return 0;
+      }
+
+      return o1.heatLoss < o2.heatLoss ? -1 : 1;
+    };
   }
 
   private int[][] populateMap() throws IOException {
