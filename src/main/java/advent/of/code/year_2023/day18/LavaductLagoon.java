@@ -17,7 +17,7 @@ public class LavaductLagoon {
   public static void main(String[] args) {
     try {
       log.info("The result for part one is: {}", new LavaductLagoon().calculateArea());
-      //log.info("The result for part two is: {}", new LavaductLagoon().calculateArea());
+      log.info("The result for part two is: {}", new LavaductLagoon().calculateAreaFixingBug());
     } catch (IOException ioe) {
       log.error("error while opening input file", ioe);
     }
@@ -27,12 +27,22 @@ public class LavaductLagoon {
    * The polygon area formula can be found here: https://www.themathdoctors.org/polygon-coordinates-and-areas/
    * To that, the (border size / 2) + 1 must be added.
    */
-  private long calculateArea() throws IOException {
-    long area = 0;
-
+  protected long calculateArea() throws IOException {
     DigPlan digPlan = readDigPlan();
     Coordinate[] coordinates = digPlan.coordinates();
 
+    return calculateArea(coordinates, digPlan);
+  }
+
+  protected long calculateAreaFixingBug() throws IOException {
+    DigPlan digPlan = readDigPlanTransformingColorsIntoCoordinates();
+    Coordinate[] coordinates = digPlan.coordinates();
+
+    return calculateArea(coordinates, digPlan);
+  }
+
+  private static long calculateArea(Coordinate[] coordinates, DigPlan digPlan) {
+    long area = 0;
     for (int i = 0; i < coordinates.length; i++) {
       Coordinate coord = coordinates[i];
       Coordinate nextCoord;
@@ -68,8 +78,38 @@ public class LavaductLagoon {
           case 'L' -> x -= steps;
           default -> throw new RuntimeException("Invalid direction: " + direction);
         }
-        borderSize += steps;
         coordinates.add(new Coordinate(y, x, color));
+        borderSize += steps;
+      }
+    }
+
+    return new DigPlan(borderSize, coordinates.toArray(new Coordinate[0]));
+  }
+
+  private DigPlan readDigPlanTransformingColorsIntoCoordinates() throws IOException {
+    List<Coordinate> coordinates = new ArrayList<>();
+    long borderSize = 0;
+
+    InputStream is = this.getClass().getResourceAsStream(INPUT_FILE);
+
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+      String line;
+      int x = 0, y = 0;
+      while ((line = br.readLine()) != null) {
+        String[] coordinateValues = line.split(" ");
+        String color = coordinateValues[2].substring(2, coordinateValues[2].length() - 1);
+        int direction = Character.getNumericValue(color.charAt(color.length() - 1));
+        int steps = Integer.parseInt(color.substring(0, color.length() - 1), 16);
+        switch (direction) {
+          // conversion rules: 0 means R, 1 means D, 2 means L, and 3 means U
+          case 3 -> y += steps;
+          case 1 -> y -= steps;
+          case 0 -> x += steps;
+          case 2 -> x -= steps;
+          default -> throw new RuntimeException("Invalid direction: " + direction);
+        }
+        coordinates.add(new Coordinate(y, x, color));
+        borderSize += steps;
       }
     }
 
