@@ -23,6 +23,7 @@ Here are some Java solutions for the [Advent of code challenges of 2023](https:/
 - [Day 15 instructions: Lens Library](https://adventofcode.com/2023/day/15) - challenge at [day 15 folder](src/main/java/advent/of/code/year_2023/day15)
 - [Day 16 instructions: The Floor Will Be Lava](https://adventofcode.com/2023/day/16) - challenge at [day 16 folder](src/main/java/advent/of/code/year_2023/day16)
 - [Day 17 instructions: Clumsy Crucible](https://adventofcode.com/2023/day/17) - challenge at [day 17 folder](src/main/java/advent/of/code/year_2023/day17)
+- [Day 18 instructions: Lavaduct Lagoon](https://adventofcode.com/2023/day/18) - challenge at [day 18 folder](src/main/java/advent/of/code/year_2023/day18)
 
 ## References
 
