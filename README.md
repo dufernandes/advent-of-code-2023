@@ -67,3 +67,9 @@ Here are some Java solutions for the [Advent of code challenges of 2023](https:/
 - [Advent of Code 2023 Day 17: Clumsy Crucible](https://www.youtube.com/watch?v=2pDSooPLLkI)
 - [Graph Data Structure 4. Dijkstra’s Shortest Path Algorithm ](https://www.youtube.com/watch?v=pVfj6mxhdMw)
 - [Dijkstra's Algorithm - Computerphile](https://www.youtube.com/watch?v=GazC3A4OQTE)
+
+### Day 18
+- [Wikipedia - Shoelace formula](https://en.wikipedia.org/wiki/Shoelace_formula)
+- [Polygon Coordinates and Areas](https://www.themathdoctors.org/polygon-coordinates-and-areas/)
+- [Github solution in Rust](https://github.com/manhunto/advent-of-code-rs/blob/master/src/solutions/day18.rs)
+- [Reddit: (explanation for border size / 2) + 1](https://www.reddit.com/r/adventofcode/comments/18l2nk2/comment/kdy7pci/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
