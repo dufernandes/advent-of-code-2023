@@ -23,6 +23,10 @@ public class LavaductLagoon {
     }
   }
 
+  /*
+   * The polygon area formula can be found here: https://www.themathdoctors.org/polygon-coordinates-and-areas/
+   * To that, the (border size / 2) + 1 must be added.
+   */
   private long calculateArea() throws IOException {
     long area = 0;
 

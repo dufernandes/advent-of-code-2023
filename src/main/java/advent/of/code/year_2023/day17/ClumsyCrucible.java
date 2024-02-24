@@ -86,6 +86,10 @@ public class ClumsyCrucible {
     return minPath;
   }
 
+  /**
+   * To solve this a modified Dijkstra algorithm must be used. It means doing a BFS with
+   * priority queue.
+   */
   private static long calculatePathWithTheLeastHeatLoss(int[][] map, long minPath) {
     Set<Visited> visited = new HashSet<>();
     PriorityQueue<State> states = new PriorityQueue<>(createHeatLossComparator());
