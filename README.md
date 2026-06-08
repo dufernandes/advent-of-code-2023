@@ -4,6 +4,8 @@
 
 Here are some Java solutions for the [Advent of code challenges of 2023](https://adventofcode.com/2023). Each challenge can be run using the `public static main(String[] args)` method, or by running `mvn clean verify`, which run all tests. These tests call all methods which solve the problems at hand.
 
+Solutions written in Java, with Maven setup in ordere to run tests for each day. Problems solved independently where possible, with references cited where external resources helped.
+
 ## Challenges
 
 - [Day 01 instructions: Trebuchet](https://adventofcode.com/2023/day/1) - challenge at [day 01 folder](src/main/java/advent/of/code/year_2023/day01)
